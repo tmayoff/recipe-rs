@@ -13,7 +13,9 @@ struct Args {
 fn main() -> Result<()> {
     let args = Args::parse();
 
-    let recipe = scrapers::scrape(&args.url)?;
+
+    let url = url::Url::parse(&args.url)?;
+    let recipe = scrapers::scrape(&url)?;
     println!("{:?}", recipe);
 
     Ok(())
