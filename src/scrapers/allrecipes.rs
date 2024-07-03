@@ -1,9 +1,8 @@
 use super::Scraper;
+use crate::numbers::parse_number;
 use crate::recipe::{Ingredient, Recipe};
 use anyhow::anyhow;
 use anyhow::Result;
-use fraction::Fraction;
-use fraction::ToPrimitive;
 use scraper::{ElementRef, Selector};
 
 pub struct AllRecipes {}
@@ -30,9 +29,7 @@ impl AllRecipes {
                 name = Some(n);
             }
             if let Some(q) = Self::parse_data(&d, "data-ingredient-quantity") {
-                println!("{:?}", q);
-                let decimal = Fraction::from_unicode_str(&q).expect("Failed to parse quantity");
-                quantity = Some(decimal.to_f32().unwrap());
+                quantity = Some(parse_number(&q)?);
             }
             if let Some(u) = Self::parse_data(&d, "data-ingredient-unit") {
                 units = Some(u);

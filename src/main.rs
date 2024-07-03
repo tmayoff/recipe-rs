@@ -1,5 +1,6 @@
 mod recipe;
 mod scrapers;
+mod numbers;
 
 use anyhow::Result;
 use clap::Parser;
