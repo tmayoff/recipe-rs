@@ -49,7 +49,7 @@ impl AllRecipes {
 }
 
 impl Scraper for AllRecipes {
-    fn scrape(dom: scraper::Html) -> anyhow::Result<crate::recipe::Recipe> {
+    fn scrape(dom: &scraper::Html) -> anyhow::Result<crate::recipe::Recipe> {
         let ingredient_selector =
             Selector::parse(".mm-recipes-structured-ingredients__list-item").unwrap();
         let dom_ingredients = dom.select(&ingredient_selector);

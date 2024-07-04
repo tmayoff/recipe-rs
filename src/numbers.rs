@@ -5,7 +5,7 @@ use std::str::FromStr;
 
 pub fn parse_number(input: &str) -> Result<f32> {
     // This feels very hacky and ugly and I'm too lazy to figure out a better way
-    
+
     let mut input = input.to_string();
     if !input.is_ascii() {
         let mut num = 0.0;
