@@ -1,3 +1,5 @@
+use crate::recipe;
+
 use super::Scraper;
 use anyhow::{anyhow, Result};
 use scraper::{Html, Selector};
@@ -27,8 +29,20 @@ struct JsonldRecipe {
 
 pub struct JsonLDScraper;
 
-fn parse_ingredient(ingredient: &str) -> crate::recipe::Ingredient {
-    todo!("String -> ingredient parsing")
+impl TryInto<crate::recipe::Recipe> for JsonldRecipe {
+    fn try_into(self) -> Result<crate::recipe::Recipe> {
+        let mut ingredients = Vec::new();
+        for i in self.recipe_ingredient {
+            ingredients.push(recipe::parse_ingredient(&i)?);
+        }
+
+        Ok(crate::recipe::Recipe {
+            name: self.name.clone(),
+            ingredients,
+        })
+    }
+
+    type Error = anyhow::Error;
 }
 
 impl Scraper for JsonLDScraper {
@@ -40,8 +54,8 @@ impl Scraper for JsonLDScraper {
             let t = json_ld.inner_html();
             let d: JsonldRecipe = serde_json::from_str(&t)?;
 
-            let recipe_type = match d.ld_type {
-                JsonldTypeValue::Primitive(ld_type) => ld_type == JsonldType::Recipe,
+            let recipe_type = match &d.ld_type {
+                JsonldTypeValue::Primitive(ld_type) => ld_type == &JsonldType::Recipe,
                 JsonldTypeValue::List(ld_types) => ld_types.contains(&JsonldType::Recipe),
             };
 
@@ -49,16 +63,7 @@ impl Scraper for JsonLDScraper {
                 continue;
             }
 
-            let ingredients = d
-                .recipe_ingredient
-                .iter()
-                .map(|i| parse_ingredient(i))
-                .collect();
-
-            return Ok(crate::recipe::Recipe {
-                name: d.name,
-                ingredients,
-            });
+            return Ok(d.try_into()?);
         }
 
         Err(anyhow!("Failed to parse json_ld"))

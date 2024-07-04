@@ -34,7 +34,7 @@ macro_rules! console_log {
 
 #[derive(Default, Debug, Serialize)]
 #[wasm_bindgen]
-pub struct Ingredient {
+pub struct WasmIngredient {
     name: String,
     quantity: Option<f32>,
     units: Option<String>,
@@ -42,9 +42,9 @@ pub struct Ingredient {
 
 #[derive(Default, Debug, Serialize)]
 #[wasm_bindgen]
-pub struct Recipe {
+pub struct WasmRecipe {
     name: String,
-    ingredients: Vec<Ingredient>,
+    ingredients: Vec<WasmIngredient>,
 }
 
 #[wasm_bindgen]
@@ -55,15 +55,15 @@ pub fn scrape(url: JsString, dom: JsString) -> JsValue {
 
     console_log!("{:?}", recipe);
 
-    let r = Recipe {
+    let r = WasmRecipe {
         name: recipe.name,
         ingredients: recipe
             .ingredients
             .iter()
-            .map(|i| Ingredient {
+            .map(|i| WasmIngredient {
                 name: i.name.clone(),
-                quantity: i.quantity,
-                units: i.units.clone(),
+                quantity: None,
+                units: None,
             })
             .collect(),
     };
