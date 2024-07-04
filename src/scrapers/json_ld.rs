@@ -8,10 +8,17 @@ enum JsonldType {
     Recipe,
 }
 
+#[derive(Debug, Deserialize, Eq, PartialEq)]
+#[serde(untagged)]
+enum JsonldTypeValue {
+    Primitive(JsonldType),
+    List(Vec<JsonldType>),
+}
+
 #[derive(Debug, Deserialize)]
 struct JsonldRecipe {
     #[serde(rename = "@type")]
-    ld_type: Vec<JsonldType>,
+    ld_type: JsonldTypeValue,
     #[serde(rename = "recipeIngredient")]
     recipe_ingredient: Vec<String>,
 
@@ -33,18 +40,25 @@ impl Scraper for JsonLDScraper {
             let t = json_ld.inner_html();
             let d: JsonldRecipe = serde_json::from_str(&t)?;
 
-            if d.ld_type.contains(&JsonldType::Recipe) {
-                let ingredients = d
-                    .recipe_ingredient
-                    .iter()
-                    .map(|i| parse_ingredient(i))
-                    .collect();
+            let recipe_type = match d.ld_type {
+                JsonldTypeValue::Primitive(ld_type) => ld_type == JsonldType::Recipe,
+                JsonldTypeValue::List(ld_types) => ld_types.contains(&JsonldType::Recipe),
+            };
 
-                return Ok(crate::recipe::Recipe {
-                    name: d.name,
-                    ingredients,
-                });
+            if !recipe_type {
+                continue;
             }
+
+            let ingredients = d
+                .recipe_ingredient
+                .iter()
+                .map(|i| parse_ingredient(i))
+                .collect();
+
+            return Ok(crate::recipe::Recipe {
+                name: d.name,
+                ingredients,
+            });
         }
 
         Err(anyhow!("Failed to parse json_ld"))
