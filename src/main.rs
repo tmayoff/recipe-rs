@@ -5,6 +5,7 @@ mod scrapers;
 
 use anyhow::Result;
 use clap::Parser;
+use formater::recipe_md;
 use scraper::Html;
 use url::Url;
 
@@ -25,7 +26,9 @@ fn main() -> Result<()> {
     let url = url::Url::parse(&args.url)?;
     let dom = download_dom(&url)?;
     let recipe = scrapers::scrape(&url, &dom)?;
-    println!("{:?}", recipe);
+
+    let output = recipe_md(&recipe);
+    println!("{}", output);
 
     Ok(())
 }

@@ -6,15 +6,11 @@ use scraper::{Html, Selector};
 use serde::Deserialize;
 
 #[derive(Debug, Deserialize, Eq, PartialEq)]
-enum JsonldType {
-    Recipe,
-}
-
-#[derive(Debug, Deserialize, Eq, PartialEq)]
 #[serde(untagged)]
 enum JsonldTypeValue {
-    Primitive(JsonldType),
-    List(Vec<JsonldType>),
+    String(String),
+    Vec(Vec<String>),
+    Other(serde_json::Value),
 }
 
 #[derive(Debug, Deserialize)]
@@ -55,8 +51,9 @@ impl Scraper for JsonLDScraper {
             let d: JsonldRecipe = serde_json::from_str(&t)?;
 
             let recipe_type = match &d.ld_type {
-                JsonldTypeValue::Primitive(ld_type) => ld_type == &JsonldType::Recipe,
-                JsonldTypeValue::List(ld_types) => ld_types.contains(&JsonldType::Recipe),
+                JsonldTypeValue::String(ld_type) => ld_type == "Recipe",
+                JsonldTypeValue::Vec(ld_types) => ld_types.contains(&"Recipe".to_owned()),
+                JsonldTypeValue::Other(_) => false,
             };
 
             if !recipe_type {
