@@ -1,8 +1,12 @@
 use anyhow::{anyhow, Result};
 use ingredient::IngredientParser;
+use serde::Serialize;
+use wasm_bindgen::prelude::*;
 
-#[derive(Default, Debug, PartialEq)]
+#[derive(Default, Debug, Clone, PartialEq, Serialize)]
+#[wasm_bindgen]
 pub struct Measure {
+    #[wasm_bindgen(getter_with_clone)]
     pub unit: String,
     pub upper_value: Option<f64>,
     pub value: f64,
@@ -18,10 +22,14 @@ impl Measure {
     }
 }
 
-#[derive(Default, Debug, PartialEq)]
+#[derive(Default, Clone, Debug, PartialEq, Serialize)]
+#[wasm_bindgen]
 pub struct Ingredient {
+    #[wasm_bindgen(getter_with_clone)]
     pub name: String,
+    #[wasm_bindgen(getter_with_clone)]
     pub amounts: Vec<Measure>,
+    #[wasm_bindgen(getter_with_clone)]
     pub modifier: Option<String>,
 }
 
@@ -35,9 +43,12 @@ impl Ingredient {
     }
 }
 
-#[derive(Default, Debug)]
+#[derive(Default, Debug, Serialize)]
+#[wasm_bindgen]
 pub struct Recipe {
+    #[wasm_bindgen(getter_with_clone)]
     pub name: String,
+    #[wasm_bindgen(getter_with_clone)]
     pub ingredients: Vec<Ingredient>,
 }
 
