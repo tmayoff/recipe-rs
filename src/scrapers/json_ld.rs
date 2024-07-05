@@ -14,11 +14,19 @@ enum JsonldTypeValue {
 }
 
 #[derive(Debug, Deserialize)]
+struct RecipeInstruction {
+    // name: String,
+    text: String,
+}
+
+#[derive(Debug, Deserialize)]
 struct JsonldRecipe {
     #[serde(rename = "@type")]
     ld_type: JsonldTypeValue,
     #[serde(rename = "recipeIngredient")]
     recipe_ingredient: Vec<String>,
+    #[serde(rename = "recipeInstructions")]
+    recipe_instructions: Vec<RecipeInstruction>,
 
     name: String,
 }
@@ -32,9 +40,16 @@ impl TryInto<crate::recipe::Recipe> for JsonldRecipe {
             ingredients.push(recipe::parse_ingredient(&i)?);
         }
 
+        let instructions = self
+            .recipe_instructions
+            .iter()
+            .map(|i| i.text.clone())
+            .collect();
+
         Ok(crate::recipe::Recipe {
             name: self.name.clone(),
             ingredients,
+            directions: instructions,
         })
     }
 

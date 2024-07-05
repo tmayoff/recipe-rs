@@ -17,5 +17,12 @@ pub fn recipe_md(recipe: &Recipe) -> String {
     text += "\n";
     text += &format!("# Directions\n");
 
+    let mut step = 1;
+    for instruction in &recipe.directions {
+        let instruction = instruction.trim();
+        text += &format!("{}. {}\n\n", step, &instruction);
+        step += 1;
+    }
+
     text
 }

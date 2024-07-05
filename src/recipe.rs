@@ -50,6 +50,8 @@ pub struct Recipe {
     pub name: String,
     #[wasm_bindgen(getter_with_clone)]
     pub ingredients: Vec<Ingredient>,
+    #[wasm_bindgen(getter_with_clone)]
+    pub directions: Vec<String>,
 }
 
 impl Into<Ingredient> for ingredient::Ingredient {
