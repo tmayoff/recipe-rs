@@ -1,9 +1,17 @@
-use anyhow::Result;
 use fraction::{Fraction, ToPrimitive};
 use regex::Regex;
 use std::str::FromStr;
+use thiserror::Error;
 
-pub fn parse_number(input: &str) -> Result<f32> {
+#[derive(Debug, Error)]
+pub enum Error {
+    #[error(transparent)]
+    FractionError(#[from] fraction::error::ParseError),
+    #[error(transparent)]
+    RegexError(#[from] regex::Error),
+}
+
+pub fn parse_number(input: &str) -> Result<f32, Error> {
     // This feels very hacky and ugly and I'm too lazy to figure out a better way
 
     let mut input = input.to_string();
@@ -42,7 +50,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn normal() -> Result<()> {
+    fn normal() -> Result<(), Error> {
         let input = "1";
 
         assert_eq!(parse_number(input)?, 1.0);
@@ -51,7 +59,7 @@ mod tests {
     }
 
     #[test]
-    fn mixed_vulgar() -> Result<()> {
+    fn mixed_vulgar() -> Result<(), Error> {
         let input = "½";
 
         assert_eq!(parse_number(input)?, 0.5);
@@ -60,7 +68,7 @@ mod tests {
     }
 
     #[test]
-    fn mixed_vulgar_spaced() -> Result<()> {
+    fn mixed_vulgar_spaced() -> Result<(), Error> {
         let input = "1 ½";
 
         assert_eq!(parse_number(input)?, 1.5);

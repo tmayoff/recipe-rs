@@ -1,9 +1,18 @@
-use crate::recipe;
+use crate::recipe::{self, Recipe};
 
-use super::Scraper;
-use anyhow::{anyhow, Result};
 use scraper::{Html, Selector};
 use serde::Deserialize;
+use thiserror::Error;
+
+#[derive(Debug, Error)]
+pub enum Error {
+    #[error("Website does not contain a JSON+LD recipe")]
+    NotJsonLD,
+    #[error(transparent)]
+    SerializationError(#[from] serde_json::Error),
+    #[error("Failed to parse ingredient")]
+    Ingredient(#[from] recipe::Error)
+}
 
 #[derive(Debug, Deserialize, Eq, PartialEq)]
 #[serde(untagged)]
@@ -31,10 +40,10 @@ struct JsonldRecipe {
     name: String,
 }
 
-pub struct JsonLDScraper;
+// pub struct JsonLDScraper;
 
 impl TryInto<crate::recipe::Recipe> for JsonldRecipe {
-    fn try_into(self) -> Result<crate::recipe::Recipe> {
+    fn try_into(self) -> Result<crate::recipe::Recipe, Error> {
         let mut ingredients = Vec::new();
         for i in self.recipe_ingredient {
             ingredients.push(recipe::parse_ingredient(&i)?);
@@ -53,31 +62,29 @@ impl TryInto<crate::recipe::Recipe> for JsonldRecipe {
         })
     }
 
-    type Error = anyhow::Error;
+    type Error = Error;
 }
 
-impl Scraper for JsonLDScraper {
-    fn scrape(dom: &Html) -> Result<crate::recipe::Recipe> {
-        let selector = Selector::parse("script[type='application/ld+json']").unwrap();
-        let json = dom.select(&selector);
+pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
+    let selector = Selector::parse("script[type='application/ld+json']").unwrap();
+    let json = dom.select(&selector);
 
-        for json_ld in json {
-            let t = json_ld.inner_html();
-            let d: JsonldRecipe = serde_json::from_str(&t)?;
+    for json_ld in json {
+        let t = json_ld.inner_html();
+        let d: JsonldRecipe = serde_json::from_str(&t)?;
 
-            let recipe_type = match &d.ld_type {
-                JsonldTypeValue::String(ld_type) => ld_type == "Recipe",
-                JsonldTypeValue::Vec(ld_types) => ld_types.contains(&"Recipe".to_owned()),
-                JsonldTypeValue::Other(_) => false,
-            };
+        let recipe_type = match &d.ld_type {
+            JsonldTypeValue::String(ld_type) => ld_type == "Recipe",
+            JsonldTypeValue::Vec(ld_types) => ld_types.contains(&"Recipe".to_owned()),
+            JsonldTypeValue::Other(_) => false,
+        };
 
-            if !recipe_type {
-                continue;
-            }
-
-            return Ok(d.try_into()?);
+        if !recipe_type {
+            continue;
         }
 
-        Err(anyhow!("Failed to parse json_ld"))
+        return Ok(d.try_into()?);
     }
+
+    Err(Error::NotJsonLD)
 }
