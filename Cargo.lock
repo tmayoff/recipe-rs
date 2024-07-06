@@ -768,6 +768,7 @@ dependencies = [
 name = "recipe-rs"
 version = "0.1.4"
 dependencies = [
+ "anyhow",
  "clap",
  "fraction",
  "getrandom",
