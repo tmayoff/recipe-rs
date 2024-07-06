@@ -1,7 +1,13 @@
-use anyhow::{anyhow, Result};
 use ingredient::IngredientParser;
 use serde::Serialize;
+use thiserror::Error;
 use wasm_bindgen::prelude::*;
+
+#[derive(Debug, Error)]
+pub enum Error {
+    #[error("Failed to parse ingredient `{0}`")]
+    IngredientParse(String),
+}
 
 #[derive(Default, Debug, Clone, PartialEq, Serialize)]
 #[wasm_bindgen]
@@ -74,7 +80,7 @@ impl Into<Ingredient> for ingredient::Ingredient {
     }
 }
 
-pub fn parse_ingredient(input: &str) -> Result<Ingredient> {
+pub fn parse_ingredient(input: &str) -> Result<Ingredient, Error> {
     let mut input = input.replace("(s)", "");
     input = input.replace("\u{2013}", "-");
     input = input.replace("\u{2014}", "-");
@@ -85,7 +91,7 @@ pub fn parse_ingredient(input: &str) -> Result<Ingredient> {
     parser.units.insert(String::from("unit"));
     let p = parser
         .parse_ingredient(&input)
-        .map_err(|e| anyhow!("{:?}", e))?;
+        .map_err(|e| Error::IngredientParse(e.to_string()))?;
 
     Ok(p.1.into())
 }
@@ -95,7 +101,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn parse_ingredients() -> Result<()> {
+    fn parse_ingredients() -> Result<(), Error> {
         let tests = vec![(
             "1 unit(s) Russet Potato",
             Ingredient {
@@ -118,7 +124,7 @@ mod tests {
     }
 
     #[test]
-    fn parse_ingredient_regression_tests() -> Result<()> {
+    fn parse_ingredient_regression_tests() -> Result<(), Error> {
         let tests = vec![
             (
                 "1 cup stuff",

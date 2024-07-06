@@ -10,14 +10,17 @@ pub mod numbers;
 pub mod recipe;
 pub mod scrapers;
 
+impl Into<JsValue> for scrapers::Error {
+    fn into(self) -> JsValue {
+        JsValue::from_str(&format!("{:?}", self))
+    }
+}
+
 #[wasm_bindgen]
-pub fn scrape(url: JsString, dom: JsString) -> Recipe {
+pub fn scrape(url: JsString, dom: JsString) -> Result<Recipe, scrapers::Error> {
     let url: String = url.into();
     let dom: String = dom.into();
-    let recipe = scrapers::scrape(&Url::parse(&url).unwrap(), &Html::parse_document(&dom)).unwrap();
-
-    recipe
-    // serde_wasm_bindgen::to_value(&recipe).unwrap()
+    scrapers::scrape(&Url::parse(&url).unwrap(), &Html::parse_document(&dom))
 }
 
 #[wasm_bindgen]
