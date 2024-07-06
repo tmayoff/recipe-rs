@@ -1,0 +1,19 @@
+name: Update Nix
+
+on:
+  schedule: 
+    - cron: "0 0 * * 6"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: DeterminateSystems/nix-installer-action@v12
+    - uses: DeterminateSystems/update-flake-lock@v23
+      with: 
+        token: ${{ secrets.FLAKE_PR_TOKEN }}
