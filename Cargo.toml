@@ -25,4 +25,4 @@ thiserror = "1.0.63"
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 anyhow = "1.0.86"
 ureq = "2.10.1"
-clap = { version = "4.5.13", features = ["derive"] }
+clap = { version = "4.5.15", features = ["derive"] }
