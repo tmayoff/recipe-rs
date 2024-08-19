@@ -11,7 +11,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 fraction = { version = "0.15.3", features = ["with-unicode"] }
 getrandom = { version = "0.2.15", features = ["js"] }
-js-sys = "0.3.69"
+js-sys = "0.3.70"
 regex = "1.10.6"
 scraper = "0.20.0"
 url = "2.5.2"
