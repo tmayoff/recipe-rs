@@ -15,10 +15,10 @@ js-sys = "0.3.70"
 regex = "1.10.6"
 scraper = "0.20.0"
 url = "2.5.2"
-serde = { version = "1.0.208", features = ["derive"] }
+serde = { version = "1.0.209", features = ["derive"] }
 serde-wasm-bindgen = "0.6.5"
 wasm-bindgen = "0.2.92"
-serde_json = "1.0.125"
+serde_json = "1.0.127"
 ingredient = "0.3.0"
 thiserror = "1.0.63"
 
