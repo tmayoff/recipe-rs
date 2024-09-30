@@ -12,7 +12,7 @@ crate-type = ["cdylib", "rlib"]
 fraction = { version = "0.15.3", features = ["with-unicode"] }
 getrandom = { version = "0.2.15", features = ["js"] }
 js-sys = "0.3.70"
-regex = "1.10.6"
+regex = "1.11.0"
 scraper = "0.20.0"
 url = "2.5.2"
 serde = { version = "1.0.210", features = ["derive"] }
