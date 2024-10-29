@@ -7,9 +7,9 @@ use thiserror::Error;
 #[derive(Debug, Deserialize)]
 struct JsonLDSchema {
     #[serde(rename = "@context")]
-    context: String,
+    _context: String,
     #[serde(rename = "@graph")]
-    graph: Vec<serde_json::Value>,
+    graph: Option<Vec<serde_json::Value>>,
 }
 
 #[derive(Debug, Error)]
@@ -20,6 +20,8 @@ pub enum Error {
     SerializationError(#[from] serde_json::Error),
     #[error("Failed to parse ingredient")]
     Ingredient(#[from] recipe::Error),
+    #[error("@type isn't the correct data type (String or Vec<String>)")]
+    IncorrectRecipeDataType,
 }
 
 #[derive(Debug, Deserialize, Eq, PartialEq)]
@@ -73,8 +75,18 @@ impl TryInto<crate::recipe::Recipe> for JsonldRecipe {
     type Error = Error;
 }
 
-fn attempt_jsonld(conent: &str) -> Result<JsonldRecipe, Error> {
-    Err(Error::NotJsonLD)
+fn attempt_jsonld(content: &str) -> Result<JsonldRecipe, Error> {
+    let recipe: JsonldRecipe = serde_json::from_str(content)?;
+    let recipe_type = match &recipe.ld_type {
+        JsonldTypeValue::String(ld_type) => ld_type == "Recipe",
+        JsonldTypeValue::Vec(ld_types) => ld_types.contains(&"Recipe".to_owned()),
+        JsonldTypeValue::Other(_) => false,
+    };
+    if !recipe_type {
+        return Err(Error::IncorrectRecipeDataType);
+    }
+
+    Ok(recipe)
 }
 
 pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
@@ -91,9 +103,8 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
 
         let d = res.ok().unwrap();
 
-        if !d.graph.is_empty() {
-            for content in d.graph {
-                println!("{:?}", content);
+        if let Some(graph) = d.graph {
+            for content in graph {
                 let res = attempt_jsonld(&content.to_string());
                 if let Ok(recipe) = res {
                     return Ok(recipe.try_into()?);
@@ -101,20 +112,14 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
             }
         } else {
             let res = attempt_jsonld(&t);
-            if let Ok(recipe) = res {
-                return Ok(recipe.try_into()?);
+            if let Err(_) = res {
+                continue;
             }
-            // let recipe_type = match &d.ld_type {
-            //     JsonldTypeValue::String(ld_type) => ld_type == "Recipe",
-            //     JsonldTypeValue::Vec(ld_types) => ld_types.contains(&"Recipe".to_owned()),
-            //     JsonldTypeValue::Other(_) => false,
-            // };
 
-            // if !recipe_type {
-            //     continue;
-            // }
+            let d = res.ok().unwrap();
+
+            return Ok(d.try_into()?);
         }
-        // return Ok(d.try_into()?);
     }
 
     Err(Error::NotJsonLD)
