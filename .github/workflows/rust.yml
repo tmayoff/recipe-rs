@@ -1,4 +1,4 @@
-name: Rust
+name: build
 
 on:
   push:
@@ -16,6 +16,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+    - uses: DeterminateSystems/flake-checker-action@v9
     - name: Build
       run: cargo build --verbose
     - name: Run tests

@@ -49,7 +49,7 @@ impl Ingredient {
     }
 }
 
-#[derive(Default, Debug, Serialize)]
+#[derive(Default, Debug, Serialize, PartialEq)]
 #[wasm_bindgen]
 pub struct Recipe {
     #[wasm_bindgen(getter_with_clone)]
