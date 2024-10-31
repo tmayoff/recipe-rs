@@ -30,18 +30,27 @@ pub fn recipe_md(recipe: &Recipe) -> String {
 #[cfg(test)]
 mod tests {
 
-    use crate::recipe::Recipe;
+    use crate::recipe::{Ingredient, Measure, Recipe};
 
     #[test]
     fn recipe_md() {
         let recipe = Recipe {
             name: "Test Recipe".to_string(),
-            ingredients: vec![],
+            ingredients: vec![Ingredient {
+                name: "flour".to_string(),
+                amounts: vec![Measure {
+                    unit: "cups".to_string(),
+                    upper_value: None,
+                    value: 1.5,
+                }],
+                modifier: None,
+            }],
             directions: vec![],
         };
 
         let expected = r##"# Ingredients
 ---
+- 1.5 cups flour
 ---
 
 # Directions
