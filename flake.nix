@@ -33,13 +33,15 @@
 
           nativeBuildInputs = with pkgs; [
             (rust.override {
-              extensions = ["rust-src"];
+              extensions = ["rust-src" "llvm-tools-preview"];
               targets = ["wasm32-unknown-unknown"];
             })
             rust-analyzer
             wasm-pack
 
+            cargo-binutils
             cargo-tarpaulin
+            cargo-llvm-cov
           ];
         };
       }
