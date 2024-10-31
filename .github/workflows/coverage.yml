@@ -18,4 +18,10 @@ jobs:
     - uses: DeterminateSystems/magic-nix-cache-action@v8
     - name: Coverage
       run: |
-        nix develop --command cargo tarpaulin -o stdout >> $GITHUB_STEP_SUMMARY
+        nix develop --command cargo llvm-cov --all-features --workspace --lcov --output-path lcov.info
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        files: lcov.info
+        fail_ci_if_error: true
+
