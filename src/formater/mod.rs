@@ -26,3 +26,29 @@ pub fn recipe_md(recipe: &Recipe) -> String {
 
     text
 }
+
+#[cfg(test)]
+mod tests {
+
+    use crate::recipe::Recipe;
+
+    #[test]
+    fn recipe_md() {
+        let recipe = Recipe {
+            name: "Test Recipe".to_string(),
+            ingredients: vec![],
+            directions: vec![],
+        };
+
+        let expected = r##"# Ingredients
+---
+---
+
+# Directions
+"##;
+
+        let got = super::recipe_md(&recipe);
+
+        assert_eq!(expected, got);
+    }
+}
