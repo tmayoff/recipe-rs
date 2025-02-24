@@ -179,6 +179,38 @@ fn download_parse() -> Result<()> {
                 Ingredient { name: "- salt".to_string(), amounts: vec![], modifier: None }, Ingredient { name: "- pepper".to_string(), amounts: vec![], modifier: None }, Ingredient { name: "- oregano".to_string(), amounts: vec![], modifier: None }, Ingredient { name: "- olive oil".to_string(), amounts: vec![], modifier: Some("lemon juice".to_string()) }
             ],
             directions: vec!["poke the cubes into the skewers about 8 pork cubes".to_string(), "- add salt &amp;amp; pepper, oregano, olive oil, lemon juice you can add 1 minced garlic clove too ( optional)".to_string(), "- grill them or stir fry them for about 10 mins each side, once you turn side cover with a heavy lid over the souvlaki, that way will be cooked faster and some of the steams will keep it softer inside and won’t come out dry!".to_string(), "- enjoy either as they are or with bread, or pita bread, tzatziki or tirokafteri or wrap them as a yiro! No matter how though, one thing is sure that are insanely delicious!".to_string()] } },
+        Test {
+            url: "https://www.ricardocuisine.com/en/recipes/6076-fryer-less-general-tao-chicken".to_string(),
+            expected: Recipe {
+                name: "Fryer-Less General Tao Chicken".to_string(),
+                ingredients: vec![
+                    Ingredient { name: "soy sauce".to_string(), amounts: vec![Measure { unit: "tbsp".to_string(), upper_value: None, value: 6.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 90.0 }], modifier: None },
+                    Ingredient { name: "chicken broth".to_string(), amounts: vec![Measure { unit: "tbsp".to_string(), upper_value: None, value: 6.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 90.0 }], modifier: Some("(or water)".to_string()) },
+                    Ingredient { name: "rice vinegar".to_string(), amounts: vec![Measure { unit: "tbsp".to_string(), upper_value: None, value: 6.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 90.0 }], modifier: None },
+                     Ingredient { name: "fresh ginger".to_string(), amounts: vec![Measure { unit: "tbsp".to_string(), upper_value: Some(2.0), value: 1.0 }, Measure { unit: "ml".to_string(), upper_value: Some(30.0), value: 15.0 }], modifier: Some("finely chopped".to_string()) },
+                    Ingredient { name: "garlic".to_string(), amounts: vec![Measure { unit: "clove".to_string(), upper_value: None, value: 3.0 }], modifier: Some("finely chopped".to_string()) },
+                    Ingredient { name: "cornstarch".to_string(), amounts: vec![Measure { unit: "tsp".to_string(), upper_value: None, value: 4.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 20.0 }], modifier: None },
+                    Ingredient { name: "paprika".to_string(), amounts: vec![Measure { unit: "tsp".to_string(), upper_value: None, value: 2.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 10.0 }], modifier: None },
+                    Ingredient { name: "sambal oelek".to_string(), amounts: vec![Measure { unit: "tsp".to_string(), upper_value: None, value: 2.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 10.0 }], modifier: None },
+                    Ingredient { name: "toasted sesame oil".to_string(), amounts: vec![Measure { unit: "tsp".to_string(), upper_value: None, value: 1.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 5.0 }], modifier: None },
+                    Ingredient { name: "sugar".to_string(), amounts: vec![Measure { unit: "cup".to_string(), upper_value: None, value: 1.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 250.0 }], modifier: None },
+                    Ingredient { name: "water".to_string(), amounts: vec![Measure { unit: "tbsp".to_string(), upper_value: None, value: 3.0 }, Measure { unit: "ml".to_string(), upper_value: None, value: 45.0 }], modifier: None },
+                    Ingredient { name: "red bell peppers".to_string(), amounts: vec![Measure { unit: "whole".to_string(), upper_value: None, value: 2.0 }], modifier: Some("cut into strips".to_string()) },
+                    Ingredient { name: "canola oil".to_string(), amounts: vec![Measure { unit: "cup".to_string(), upper_value: None, value: 0.75 }, Measure { unit: "ml".to_string(), upper_value: None, value: 180.0 }], modifier: None },
+                    Ingredient { name: "chicken skinless and boneless thighs chicken".to_string(), amounts: vec![Measure { unit: "lb".to_string(), upper_value: None, value: 2.0 }, Measure { unit: "kg".to_string(), upper_value: None, value: 1.0 }], modifier: Some("cut into large cubes".to_string()) },
+                    Ingredient { name: "unbleached all-purpose flour".to_string(), amounts: vec![Measure { unit: "cup".to_string(), upper_value: None, value: 0.5 }, Measure { unit: "ml".to_string(), upper_value: None, value: 125.0 }], modifier: None },
+                    Ingredient { name: "green onions".to_string(), amounts: vec![Measure { unit: "whole".to_string(), upper_value: None, value: 2.0 }], modifier: Some("thinly sliced".to_string()) },
+                    Ingredient { name: "Salt and pepper".to_string(), amounts: vec![], modifier: None }
+                ],
+                directions: vec![
+                    "In a small bowl, combine soy sauce, broth, vinegar, ginger, garlic, cornstarch, paprika, sambal oelek and sesame oil. Set aside.".to_string(),
+                    "In a small saucepan, combine sugar and water. Bring to a boil and simmer until mixture is slightly caramelized, about 5 minutes. Add soy mixture. Bring to a boil, whisking constantly. Keep sauce aside, off the heat.".to_string(),
+                    "In a large non-stick skillet, soften peppers for about 3 minutes in 30 ml (2 tablespoons) of oil. Set aside on a plate.".to_string(),
+                    "In a bowl, season chicken pieces with salt and pepper. Add flour and toss until well coated. Remove any excess flour. In the same skillet, brown half of the chicken at a time in remaining oil (150 ml/2/3 cup), making sure to always have about 1-cm (3/4-inch) of oil to fry chicken. Add oil, if needed. Drain on paper towels and keep warm. Repeat with remaining chicken. Discard oil.".to_string(),
+                    "In the same skillet, heat sauce. Add chicken and toss to coat well. Sprinkle with green onions.".to_string(),
+                    "Serve with rice and stir-fried vegetables such as bok choy or Chinese cabbage.".to_string()]
+            }
+        },
     ];
 
     for test in tests {

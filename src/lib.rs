@@ -8,8 +8,8 @@ use crate::recipe::Recipe;
 pub mod formater;
 pub mod numbers;
 pub mod recipe;
-pub mod scrapers;
 mod schema_org;
+pub mod scrapers;
 
 impl Into<JsValue> for scrapers::Error {
     fn into(self) -> JsValue {
