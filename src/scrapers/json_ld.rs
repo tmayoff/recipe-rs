@@ -68,40 +68,6 @@ impl TryInto<crate::recipe::Recipe> for schema_org::Recipe {
     type Error = Error;
 }
 
-// fn attempt_jsonld(content: &str) -> Result<schema_org::Recipe, Error> {
-//     let jd = &mut serde_json::Deserializer::from_str(content);
-
-//     // let recipe: JsonldRecipe = serde_json::from_str(content)?;
-//     let recipe: Result<schema_org::Recipe, _> = serde_path_to_error::deserialize(jd);
-
-//     match recipe {
-//         Ok(recipe) => {
-//             let is_recipe_type = &match recipe.clone()._type {
-//                 Some(_type) => match _type {
-//                     schema_org::Type::String(_type) => _type == "Recipe",
-//                     schema_org::Type::List(types) => types.contains(&"Recipe".to_string()),
-//                     // _ => false,
-//                 },
-//                 None => false,
-//             };
-
-//             if !is_recipe_type {
-//                 return Err(Error::IncorrectRecipeDataType);
-//             }
-
-//             Ok(recipe)
-//         }
-//         Err(e) => {
-//             let col = e.inner().column();
-//             let surrounding = 50;
-//             let start = max(col - surrounding, 0);
-//             let end = min(col + surrounding, content.len());
-//             println!("{}", &content[start..end]);
-//             Err(Error::Other(anyhow!("{}", e)))
-//         }
-//     }
-// }
-
 pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
     let selector = Selector::parse("script[type='application/ld+json']").unwrap();
     let json = dom.select(&selector);

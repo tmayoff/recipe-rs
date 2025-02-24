@@ -67,7 +67,6 @@ pub struct Schema {
 
 #[derive(Deserialize)]
 #[serde(untagged)]
-// #[serde(tag = "@type")]
 pub enum LdJson {
     // These need to be ordered
     Recipe(Recipe),
