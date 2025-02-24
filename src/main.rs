@@ -1,6 +1,7 @@
 mod formater;
 mod numbers;
 mod recipe;
+mod schema_org;
 mod scrapers;
 
 use anyhow::Result;

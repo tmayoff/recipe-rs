@@ -9,6 +9,7 @@ pub mod formater;
 pub mod numbers;
 pub mod recipe;
 pub mod scrapers;
+mod schema_org;
 
 impl Into<JsValue> for scrapers::Error {
     fn into(self) -> JsValue {
