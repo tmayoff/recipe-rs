@@ -1,6 +1,6 @@
 use crate::{
     recipe::{self, Recipe},
-    schema_org::{self},
+    schema_org::{self, CreativeWork},
 };
 
 use scraper::{Html, Selector};
@@ -23,6 +23,15 @@ pub enum Error {
     Other(#[from] anyhow::Error),
 }
 
+fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
+    work.item_list_element
+        .as_ref()
+        .expect("Directions requires a list of elements")
+        .iter()
+        .map(|w| w.text.clone().expect("direction needs text"))
+        .collect()
+}
+
 impl TryInto<crate::recipe::Recipe> for schema_org::Recipe {
     fn try_into(self) -> Result<crate::recipe::Recipe, Error> {
         let mut ingredients = Vec::new();
@@ -37,36 +46,17 @@ impl TryInto<crate::recipe::Recipe> for schema_org::Recipe {
                 for work in work {
                     let _type = work
                         ._type
+                        .as_ref()
                         .expect("CreativeWork sections require the '@type' field");
-                    let is_how_to_section = _type.is_type("HowToSection");
-                    if !is_how_to_section {
-                        continue;
+
+                    if _type.is_type("HowToSection") {
+                        instructions.append(&mut extract_steps_from_how_to_section(&work));
+                    } else if _type.is_type("HowToStep") {
+                        instructions.push(work.text.expect("Instruction requires some text"));
                     }
-
-                    let mut item_list_elements: Vec<String> = work
-                        .item_list_element
-                        .expect("Directions requires a list of elements")
-                        .iter()
-                        .map(|w| w.text.clone().expect("direction needs text"))
-                        .collect();
-
-                    instructions.append(&mut item_list_elements);
                 }
             }
         }
-        // let instructions = match self.recipe_instructions.first() {
-        //     Some(section) => match section {
-        //         InstructionSections::HowToSection {
-        //             _type,
-        //             item_list_element,
-        //         } => item_list_element.clone(),
-        //         InstructionSections::Instructions(instructions) => instructions.clone(),
-        //     },
-        //     None => Vec::<RecipeInstruction>::new(),
-        // }
-        // .iter()
-        // .map(|i| i.text.clone())
-        // .collect();
 
         Ok(crate::recipe::Recipe {
             name: self.name.clone(),
@@ -145,10 +135,9 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
             }
         }
 
-        //     let d = res.ok().unwrap();
         match recipe {
             Some(recipe) => return Ok(recipe.try_into()?),
-            None => return Err(Error::NoRecipeFound),
+            None => last_err = Some(Error::NoRecipeFound.into()),
         }
     }
 

@@ -166,16 +166,19 @@ fn download_parse() -> Result<()> {
                  "In a large pot or pan over medium heat, sauté the chopped onion in the olive oil for 5 minutes, stirring frequently. Then add the garlic and ginger and cook 1 more minute, until fragrant.".to_string(), "Add the garam masala, turmeric and red pepper flakes to the pan and stir into the onion mixture. Add a few tablespoons of water if the mixture is too dry.".to_string(), "Now add the dried lentils, canned tomatoes and their juices, coconut milk and vegetable broth to the pan. Stir well and turn the heat to high. Bring to a boil, then lower heat and simmer for about 15 minutes, until the lentils are cooked and soft. Stir occasionally.".to_string(), "Squeeze the lemon juice into the pan, and stir in the spinach as well until wilted. Add salt to taste. I used 1 teaspoon.".to_string(), "Serve with brown or white rice and Vegan Naan. Enjoy!".to_string(),
              ],
          },
-     },
-    //  Test {
-    //      url: "https://www.feastingathome.com/zaatar-spice-recipe/".to_string(),
-    //      expected: Recipe {
-    //          name: "zaatar".to_string(),
-    //          ingredients: Vec::new(),
-    //          directions: Vec::new(),
-    //      },
-    //  },
-    //  Test { url: "https://s.samsungfood.com/JwKRp".to_string(), expected: Recipe{ name: "".to_string(), ingredients: vec![], directions: vec![], }, }
+     },     Test {
+         url: "https://s.samsungfood.com/JwKRp".to_string(),
+         expected: Recipe{
+            name: "pork souvlaki".to_string(),
+            ingredients: vec![
+                Ingredient {
+                    name: "- pork shoulder or belly in cubes".to_string(),
+                    amounts: vec![],
+                    modifier: None
+                },
+                Ingredient { name: "- salt".to_string(), amounts: vec![], modifier: None }, Ingredient { name: "- pepper".to_string(), amounts: vec![], modifier: None }, Ingredient { name: "- oregano".to_string(), amounts: vec![], modifier: None }, Ingredient { name: "- olive oil".to_string(), amounts: vec![], modifier: Some("lemon juice".to_string()) }
+            ],
+            directions: vec!["poke the cubes into the skewers about 8 pork cubes".to_string(), "- add salt &amp;amp; pepper, oregano, olive oil, lemon juice you can add 1 minced garlic clove too ( optional)".to_string(), "- grill them or stir fry them for about 10 mins each side, once you turn side cover with a heavy lid over the souvlaki, that way will be cooked faster and some of the steams will keep it softer inside and won’t come out dry!".to_string(), "- enjoy either as they are or with bread, or pita bread, tzatziki or tirokafteri or wrap them as a yiro! No matter how though, one thing is sure that are insanely delicious!".to_string()] } },
     ];
 
     for test in tests {
