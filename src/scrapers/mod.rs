@@ -17,6 +17,8 @@ pub fn scrape(url: &Url, dom: &Html) -> Result<Recipe, Error> {
         return Ok(recipe);
     }
 
+    println!("{}", json_attempt.unwrap_err());
+
     match url.domain().unwrap_or_default() {
         _ => Err(Error::UrlUnknown(
             url.domain().unwrap_or_default().to_owned(),
