@@ -19,8 +19,8 @@ pub enum Error {
     #[error("@type isn't the correct data type (String or Vec<String>)")]
     IncorrectRecipeDataType,
 
-    #[error(transparent)]
-    Other(#[from] anyhow::Error),
+    // #[error(transparent)]
+    // Other(#[from] anyhow::Error),
 }
 
 fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
