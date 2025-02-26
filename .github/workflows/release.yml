@@ -25,10 +25,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "lts/*"
-      - name: Install dependencies
-        run: npm clean-install
-      - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
-        run: npm audit signatures
+      - run: cargo install wasm-pack
+      - name: build
+        run: cargo build
+      - name: wasm-pack
+        run: wasm-pack build
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
