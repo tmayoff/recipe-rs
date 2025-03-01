@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.8](https://github.com/tmayoff/recipe-rs/compare/v0.1.7...v0.1.8) (2025-03-01)
+
+
+### Bug Fixes
+
+* release trigger ([e5c9e6c](https://github.com/tmayoff/recipe-rs/commit/e5c9e6c375691a9189032094eae72ba48d65c62a))
+* use github npm registry ([e1778cd](https://github.com/tmayoff/recipe-rs/commit/e1778cd06153b117de305ad841c53571ecacd94a))
+
 ## [0.1.7](https://github.com/tmayoff/recipe-rs/compare/v0.1.7...v0.1.7) (2025-03-01)
 
 
