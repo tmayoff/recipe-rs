@@ -13,6 +13,7 @@ jobs:
     name: Release
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v4
       - uses: taiki-e/install-action@v2
         with:
           tool: wasm-pack
