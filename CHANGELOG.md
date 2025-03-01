@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.9](https://github.com/tmayoff/recipe-rs/compare/v0.1.8...v0.1.9) (2025-03-01)
+
+
+### Bug Fixes
+
+* add scope to wasm build ([9ca2405](https://github.com/tmayoff/recipe-rs/commit/9ca2405c80d6153c3184956f0151a9b99a117c29))
+* reorder things ([c82fbef](https://github.com/tmayoff/recipe-rs/commit/c82fbefbbaf963f56aa27e194d58c870e2c75e9a))
+
 ## [0.1.8](https://github.com/tmayoff/recipe-rs/compare/v0.1.7...v0.1.8) (2025-03-01)
 
 
