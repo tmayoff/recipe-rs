@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.10](https://github.com/tmayoff/recipe-rs/compare/v0.1.9...v0.1.10) (2025-03-01)
+
+
+### Bug Fixes
+
+* action permissions ([e45b019](https://github.com/tmayoff/recipe-rs/commit/e45b019fe36f08b8c2008c76ccc2424c4d8f5b8c))
+
 ## [0.1.9](https://github.com/tmayoff/recipe-rs/compare/v0.1.8...v0.1.9) (2025-03-01)
 
 
