@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 permissions:
   contents: read # for checkout
@@ -11,29 +12,11 @@ jobs:
   release:
     name: Release
     runs-on: ubuntu-latest
-    permissions:
-      contents: write # to be able to publish a GitHub release
-      issues: write # to be able to comment on released issues
-      pull-requests: write # to be able to comment on released pull requests
-      id-token: write # to enable use of OIDC for npm provenance
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: googleapis/release-please-action@v4
         with:
-          fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: "lts/*"
-      - run: cargo install wasm-pack
-      - name: build
-        run: cargo build
-      - name: wasm-pack
-        run: wasm-pack build
-      - name: Release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: |
-          cd pkg/
-          npx semantic-release
+          token: ${{ secrets.RELEASE_PLEASE }}
+          # optional. customize path to release-please-config.json
+          config-file: release-please-config.json
+          # optional. customize path to .release-please-manifest.json
+          # manifest-file: .release-please-manifest.json
