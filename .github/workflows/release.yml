@@ -19,6 +19,7 @@ jobs:
           tool: wasm-pack
 
       - run: wasm-pack build
+      - run: ls -la pkg/
       
       - uses: googleapis/release-please-action@v4
         with:
