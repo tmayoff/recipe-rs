@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read # for checkout
+  contents: read
 
 jobs:
   release:
@@ -27,7 +27,7 @@ jobs:
 
       - name: Build
         if: ${{ steps.release.outputs.release_created }}
-        run: wasm-pack build
+        run: wasm-pack build --target web
 
       - run: |
           cd pkg
