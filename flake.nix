@@ -29,6 +29,8 @@
           buildInputs = with pkgs; [
             pkg-config
             openssl
+
+            nodejs_23
           ];
 
           nativeBuildInputs = with pkgs;
