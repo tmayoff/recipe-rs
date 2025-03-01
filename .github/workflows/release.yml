@@ -28,7 +28,7 @@ jobs:
 
       - name: Build
         if: ${{ steps.release.outputs.release_created }}
-        run: wasm-pack build --target web
+        run: wasm-pack build --target web --scope tmayoff
 
       - uses: actions/setup-node@v4
         with:
