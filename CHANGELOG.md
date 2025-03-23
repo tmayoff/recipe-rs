@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.11](https://github.com/tmayoff/recipe-rs/compare/v0.1.10...v0.1.11) (2025-03-23)
+
+
+### Bug Fixes
+
+* Pin scraper to 0.20.0 because newer versions break in wasm ([#103](https://github.com/tmayoff/recipe-rs/issues/103)) ([d89184d](https://github.com/tmayoff/recipe-rs/commit/d89184d9a54dabe1e2f34344a414e5b4f4b2fb15))
+
 ## [0.1.10](https://github.com/tmayoff/recipe-rs/compare/v0.1.9...v0.1.10) (2025-03-01)
 
 
