@@ -42,6 +42,8 @@
               rust-analyzer
               wasm-pack
 
+              yarn
+
               cargo-binutils
               cargo-tarpaulin
             ]
