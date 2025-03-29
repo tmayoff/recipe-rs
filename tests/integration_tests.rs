@@ -1,4 +1,4 @@
-use anyhow::Result;
+use anyhow::{Context, Result};
 use recipe_rs::{
     recipe::{Ingredient, Measure, Recipe},
     scrapers,
@@ -21,7 +21,7 @@ fn download_parse() -> Result<()> {
 
     let tests = vec![
      Test {
-         url: "https://www.noracooks.com/red-lentil-dahl/".to_string(),
+         url: "https://www.noracooks.com/red-lentil-dahl".to_string(),
          expected: Recipe {
              name: "Quick &amp; Easy Red Lentil Dahl".to_string(),
              ingredients: vec![
@@ -215,7 +215,7 @@ fn download_parse() -> Result<()> {
 
     for test in tests {
         let url = url::Url::parse(&test.url)?;
-        let dom = download_dom(&url)?;
+        let dom = download_dom(&url).with_context(|| "Failed to download DOM")?;
         let recipe = scrapers::scrape(&url, &dom)?;
 
         assert_eq!(recipe, test.expected);
