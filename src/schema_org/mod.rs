@@ -41,7 +41,7 @@ pub enum RecipeInstructions {
     CreativeWork(Vec<CreativeWork>),
 }
 
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Deserialize, Default)]
 pub struct Quantity {
     count: f32,
     unit: String,
@@ -60,67 +60,80 @@ where
     })
 }
 
-// fn from_string<'de, D>(deserializer: D) -> Result<Mass, D::Error>
-// where
-//     D: Deserializer<'de>,
-// {
-//     let s: &str = Deserialize::deserialize(deserializer)?;
+fn option_into_quantity<'de, D>(deserializer: D) -> Result<Option<Quantity>, D::Error>
+where
+    D: Deserializer<'de>,
+{
+    Option::deserialize(deserializer)?
+        .map(|s: String| {
+            let mut args = s.split_whitespace();
+            let count_str = args.next().unwrap_or_default();
+            let count = count_str
+                .parse::<f32>()
+                .map_err(|e| serde::de::Error::custom(format!("Failed to parse count: {}", e)))?;
+            let unit = args.next().unwrap_or_default().to_string();
+            Ok(Quantity { count, unit })
+        })
+        .transpose()
+}
 
-//     let mut args = s.split_whitespace();
-//     Ok(Mass {
-//         count: args.next().unwrap_or_default().parse::<f32>().unwrap(),
-//         unit: args.next().unwrap_or_default().to_string(),
-//     })
-// }
-
-// #[derive(Clone, Deserialize)]
-// pub struct Energy {
-//     count: f32,
-//     unit: String,
-// }
-
-// #[derive(Clone, Deserialize)]
-// pub struct Mass {
-//     count: f32,
-//     unit: String,
-// }
-
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Default, Deserialize)]
 pub struct NutritionalInformation {
-    #[serde(deserialize_with = "into_quantity")]
-    calories: Quantity,
+    #[serde(default, deserialize_with = "option_into_quantity")]
+    calories: Option<Quantity>,
 
-    #[serde(deserialize_with = "into_quantity")]
-    carbohydrateContent: Option<Quantity>,
+    #[serde(
+        default,
+        rename = "carbohydrateContent",
+        deserialize_with = "option_into_quantity"
+    )]
+    carbohydrate_content: Option<Quantity>,
 
-    #[serde(deserialize_with = "into_quantity")]
-    cholesterolContent: Quantity,
+    #[serde(
+        default,
+        rename = "cholesterolContent",
+        deserialize_with = "option_into_quantity"
+    )]
+    cholesterolContent: Option<Quantity>,
 
-    #[serde(deserialize_with = "into_quantity")]
-    fatContent: Quantity,
+    #[serde(default, rename = "fatContent", deserialize_with = "into_quantity")]
+    fat_content: Quantity,
 
-    #[serde(deserialize_with = "into_quantity")]
-    fiberContent: Quantity,
+    #[serde(default, rename = "fiberContent", deserialize_with = "into_quantity")]
+    fiber_content: Quantity,
 
-    #[serde(deserialize_with = "into_quantity")]
-    proteinContent: Quantity,
+    #[serde(default, rename = "proteinContent", deserialize_with = "into_quantity")]
+    protein_content: Quantity,
 
-    #[serde(deserialize_with = "into_quantity")]
-    saturatedFatContent: Quantity,
+    #[serde(
+        default,
+        rename = "saturatedFatContent",
+        deserialize_with = "into_quantity"
+    )]
+    saturated_fat_content: Quantity,
 
-    #[serde(deserialize_with = "into_quantity")]
-    sodiumContent: Quantity,
+    #[serde(default, rename = "sodiumContent", deserialize_with = "into_quantity")]
+    sodium_content: Quantity,
 
-    #[serde(deserialize_with = "into_quantity")]
-    sugarContent: Quantity,
+    #[serde(default, rename = "sugarContent", deserialize_with = "into_quantity")]
+    sugar_content: Quantity,
 
-    #[serde(deserialize_with = "into_quantity")]
-    transFatContent: Quantity,
+    #[serde(
+        default,
+        rename = "transFatContent",
+        deserialize_with = "into_quantity"
+    )]
+    trans_fat_content: Quantity,
 
-    #[serde(deserialize_with = "into_quantity")]
-    unsaturatedFatContent: Quantity,
+    #[serde(
+        default,
+        rename = "unsaturatedFatContent",
+        deserialize_with = "into_quantity"
+    )]
+    unsaturated_fat_content: Quantity,
 
-    servingSize: String,
+    #[serde(rename = "servingSize")]
+    serving_size: Option<String>,
 }
 
 #[derive(Deserialize, Clone)]
@@ -202,8 +215,10 @@ mod tests {
 
         assert!(recipe.nutrition.is_some());
         let nutrition = recipe.nutrition.unwrap();
-        assert_eq!(nutrition.calories.count, 240.0);
-        assert_eq!(nutrition.calories.unit, "calories");
+
+        let cals = nutrition.calories.unwrap();
+        assert_eq!(cals.count, 240.0);
+        assert_eq!(cals.unit, "calories");
 
         Ok(())
     }
