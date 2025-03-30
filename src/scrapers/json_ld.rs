@@ -18,7 +18,6 @@ pub enum Error {
     Ingredient(#[from] recipe::Error),
     #[error("@type isn't the correct data type (String or Vec<String>)")]
     IncorrectRecipeDataType,
-
     // #[error(transparent)]
     // Other(#[from] anyhow::Error),
 }
@@ -32,8 +31,18 @@ fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
         .collect()
 }
 
+impl TryInto<crate::recipe::NutritionalInformation> for schema_org::NutritionalInformation {
+    type Error = Error;
+
+    fn try_into(self) -> Result<crate::recipe::NutritionalInformation, Self::Error> {
+        Ok(crate::recipe::NutritionalInformation {
+            calories: self.calories.map(|c| c.count).unwrap_or_default(),
+        })
+    }
+}
+
 impl TryInto<crate::recipe::Recipe> for schema_org::Recipe {
-    fn try_into(self) -> Result<crate::recipe::Recipe, Error> {
+    fn try_into(self) -> Result<crate::recipe::Recipe, Self::Error> {
         let mut ingredients = Vec::new();
         for i in self.recipe_ingredients {
             ingredients.push(recipe::parse_ingredient(&i)?);
@@ -62,6 +71,7 @@ impl TryInto<crate::recipe::Recipe> for schema_org::Recipe {
             name: self.name.clone(),
             ingredients,
             directions: instructions,
+            nutritional_information: self.nutrition.map(|n| n.try_into().unwrap_or_default()),
         })
     }
 
@@ -77,7 +87,7 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
     for json_ld in json {
         let t = json_ld.inner_html();
 
-        let mut recipe = None;
+        // let mut recipe = None;
 
         let schema: Result<schema_org::LdJson, _> = serde_json::from_str(&t);
 
@@ -87,19 +97,20 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
         }
 
         let schema: schema_org::LdJson = schema.expect("Error handled above ^");
-        match schema {
-            schema_org::LdJson::Recipe(r) => recipe = Some(r),
-            schema_org::LdJson::Schema(schema) => {
-                if let Some(g) = schema.graph {
-                    for g in g {
-                        let result: Result<schema_org::Recipe, _> = serde_json::from_value(g);
-                        if let Ok(r) = result {
-                            recipe = Some(r);
-                        }
-                    }
-                }
-            }
-        }
+        let recipe = schema.get_recipe();
+        // match schema {
+        //     schema_org::LdJson::Recipe(r) => recipe = Some(r),
+        //     schema_org::LdJson::Schema(schema) => {
+        //         if let Some(g) = schema.graph {
+        //             for g in g {
+        //                 // let result: Result<schema_org::Recipe, _> = serde_json::from_value(g);
+        //                 // if let Ok(r) = result {
+        //                 //     recipe = Some(r);
+        //                 // }
+        //             }
+        //         }
+        //     }
+        // }
 
         match recipe {
             Some(recipe) => return Ok(recipe.try_into()?),
