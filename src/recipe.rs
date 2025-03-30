@@ -49,6 +49,12 @@ impl Ingredient {
     }
 }
 
+#[wasm_bindgen]
+#[derive(Default, Clone, Debug, Serialize, PartialEq)]
+pub struct NutritionalInformation {
+    pub calories: f32,
+}
+
 #[derive(Default, Debug, Serialize, PartialEq)]
 #[wasm_bindgen]
 pub struct Recipe {
@@ -58,6 +64,9 @@ pub struct Recipe {
     pub ingredients: Vec<Ingredient>,
     #[wasm_bindgen(getter_with_clone)]
     pub directions: Vec<String>,
+
+    #[wasm_bindgen(getter_with_clone)]
+    pub nutritional_information: Option<NutritionalInformation>,
 }
 
 impl Into<Ingredient> for ingredient::Ingredient {

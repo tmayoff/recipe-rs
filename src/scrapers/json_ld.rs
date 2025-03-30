@@ -31,8 +31,18 @@ fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
         .collect()
 }
 
+impl TryInto<crate::recipe::NutritionalInformation> for schema_org::NutritionalInformation {
+    type Error = Error;
+
+    fn try_into(self) -> Result<crate::recipe::NutritionalInformation, Self::Error> {
+        Ok(crate::recipe::NutritionalInformation {
+            calories: self.calories.map(|c| c.count).unwrap_or_default(),
+        })
+    }
+}
+
 impl TryInto<crate::recipe::Recipe> for schema_org::Recipe {
-    fn try_into(self) -> Result<crate::recipe::Recipe, Error> {
+    fn try_into(self) -> Result<crate::recipe::Recipe, Self::Error> {
         let mut ingredients = Vec::new();
         for i in self.recipe_ingredients {
             ingredients.push(recipe::parse_ingredient(&i)?);
@@ -61,6 +71,7 @@ impl TryInto<crate::recipe::Recipe> for schema_org::Recipe {
             name: self.name.clone(),
             ingredients,
             directions: instructions,
+            nutritional_information: self.nutrition.map(|n| n.try_into().unwrap_or_default()),
         })
     }
 

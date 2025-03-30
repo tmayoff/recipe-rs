@@ -57,6 +57,7 @@ mod tests {
                 },
             ],
             directions: vec!["Crack an egg".to_string(), "Add flour".to_string()],
+            nutritional_information: None,
         };
 
         let expected = r##"# Ingredients

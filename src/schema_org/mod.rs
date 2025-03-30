@@ -43,8 +43,8 @@ pub enum RecipeInstructions {
 
 #[derive(Clone, Deserialize, Default)]
 pub struct Quantity {
-    count: f32,
-    unit: String,
+    pub count: f32,
+    pub unit: String,
 }
 
 fn into_quantity<'de, D>(deserializer: D) -> Result<Quantity, D::Error>
@@ -80,7 +80,7 @@ where
 #[derive(Clone, Default, Deserialize)]
 pub struct NutritionalInformation {
     #[serde(default, deserialize_with = "option_into_quantity")]
-    calories: Option<Quantity>,
+    pub calories: Option<Quantity>,
 
     #[serde(
         default,
@@ -94,7 +94,7 @@ pub struct NutritionalInformation {
         rename = "cholesterolContent",
         deserialize_with = "option_into_quantity"
     )]
-    cholesterolContent: Option<Quantity>,
+    cholesterol_content: Option<Quantity>,
 
     #[serde(default, rename = "fatContent", deserialize_with = "into_quantity")]
     fat_content: Quantity,
