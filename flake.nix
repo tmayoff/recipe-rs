@@ -36,10 +36,10 @@
           nativeBuildInputs = with pkgs;
             [
               (rust.override {
-                extensions = ["rust-src" "llvm-tools-preview" "rust-analyzer"];
+                extensions = ["rust-src" "rustfmt" "llvm-tools-preview" "rust-analyzer"];
                 targets = ["wasm32-unknown-unknown"];
               })
-              # rust-analyzer
+
               wasm-pack
 
               yarn
