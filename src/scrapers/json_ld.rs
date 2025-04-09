@@ -1,10 +1,15 @@
+use std::str::FromStr;
+
 use crate::{
     recipe::{self, Recipe},
-    schema_org::{self, CreativeWork},
+    schema_org::{self, CreativeWork, Quantity},
 };
 
-use scraper::{Html, Selector};
+use fraction::ToPrimitive;
+use runtime_units::{traits::ArbitraryQuantity, units_base::UnitDefinition, UnitTypes};
+use scraper::{selector::ToCss, Html, Selector};
 use thiserror::Error;
+use uom::{Conversion, ConversionFactor};
 
 #[derive(Debug, Error)]
 pub enum Error {
@@ -16,8 +21,8 @@ pub enum Error {
     SerializationError(#[from] serde_json::Error),
     #[error("Failed to parse ingredient")]
     Ingredient(#[from] recipe::Error),
-    #[error("@type isn't the correct data type (String or Vec<String>)")]
-    IncorrectRecipeDataType,
+    // #[error("@type isn't the correct data type (String or Vec<String>)")]
+    // IncorrectRecipeDataType,
     // #[error(transparent)]
     // Other(#[from] anyhow::Error),
 }
@@ -31,12 +36,44 @@ fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
         .collect()
 }
 
+fn to_kcal(energy: String) -> f32 {
+    let cals = uom::si::f32::Energy::from_str(&energy).unwrap();
+
+    let kcals = cals.get::<uom::si::energy::kilocalorie>();
+
+    kcals
+}
+
+fn to_grams(quantity: String) -> f32 {
+    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity).unwrap();
+
+    let grams = grams.get::<uom::si::mass::gram>();
+    grams.value().to_f32().unwrap_or_default()
+}
+
+fn to_mgrams(quantity: String) -> f32 {
+    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity).unwrap();
+
+    let grams = grams.get::<uom::si::mass::milligram>();
+    grams.value().to_f32().unwrap_or_default()
+}
+
 impl TryInto<crate::recipe::NutritionalInformation> for schema_org::NutritionalInformation {
     type Error = Error;
 
     fn try_into(self) -> Result<crate::recipe::NutritionalInformation, Self::Error> {
+        println!("{:?}", self);
+
         Ok(crate::recipe::NutritionalInformation {
-            calories: self.calories.map(|c| c.count).unwrap_or_default(),
+            calories_kcal: self.calories.map(|c| to_kcal(c)).unwrap_or_default(),
+            carbohydrates_g: self
+                .carbohydrate_content
+                .map(|q| to_grams(q))
+                .unwrap_or_default(),
+            fat_g: to_grams(self.fat_content),
+            protein_g: to_grams(self.protein_content),
+            cholesterol_mg: self.cholesterol_content.map(to_mgrams).unwrap_or_default(),
+            fiber_g: to_grams(self.fiber_content),
         })
     }
 }
@@ -87,8 +124,6 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
     for json_ld in json {
         let t = json_ld.inner_html();
 
-        // let mut recipe = None;
-
         let schema: Result<schema_org::LdJson, _> = serde_json::from_str(&t);
 
         if let Err(e) = schema {
@@ -98,20 +133,6 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
 
         let schema: schema_org::LdJson = schema.expect("Error handled above ^");
         let recipe = schema.get_recipe();
-        // match schema {
-        //     schema_org::LdJson::Recipe(r) => recipe = Some(r),
-        //     schema_org::LdJson::Schema(schema) => {
-        //         if let Some(g) = schema.graph {
-        //             for g in g {
-        //                 // let result: Result<schema_org::Recipe, _> = serde_json::from_value(g);
-        //                 // if let Ok(r) = result {
-        //                 //     recipe = Some(r);
-        //                 // }
-        //             }
-        //         }
-        //     }
-        // }
-
         match recipe {
             Some(recipe) => return Ok(recipe.try_into()?),
             None => last_err = Some(Error::NoRecipeFound.into()),

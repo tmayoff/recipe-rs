@@ -41,7 +41,7 @@ pub enum RecipeInstructions {
     CreativeWork(Vec<CreativeWork>),
 }
 
-#[derive(Clone, Deserialize, Default)]
+#[derive(Clone, Deserialize, Default, Debug)]
 pub struct Quantity {
     pub count: f32,
     pub unit: String,
@@ -77,33 +77,25 @@ where
         .transpose()
 }
 
-#[derive(Clone, Default, Deserialize)]
+#[derive(Clone, Default, Debug, Deserialize)]
 pub struct NutritionalInformation {
-    #[serde(default, deserialize_with = "option_into_quantity")]
-    pub calories: Option<Quantity>,
+    #[serde(default)]
+    pub calories: Option<String>,
 
-    #[serde(
-        default,
-        rename = "carbohydrateContent",
-        deserialize_with = "option_into_quantity"
-    )]
-    carbohydrate_content: Option<Quantity>,
+    #[serde(default, rename = "carbohydrateContent")]
+    pub carbohydrate_content: Option<String>,
 
-    #[serde(
-        default,
-        rename = "cholesterolContent",
-        deserialize_with = "option_into_quantity"
-    )]
-    cholesterol_content: Option<Quantity>,
+    #[serde(default, rename = "cholesterolContent")]
+    pub cholesterol_content: Option<String>,
 
-    #[serde(default, rename = "fatContent", deserialize_with = "into_quantity")]
-    fat_content: Quantity,
+    #[serde(default, rename = "fatContent")]
+    pub fat_content: String,
 
-    #[serde(default, rename = "fiberContent", deserialize_with = "into_quantity")]
-    fiber_content: Quantity,
+    #[serde(default, rename = "fiberContent")]
+    pub fiber_content: String,
 
-    #[serde(default, rename = "proteinContent", deserialize_with = "into_quantity")]
-    protein_content: Quantity,
+    #[serde(default, rename = "proteinContent")]
+    pub protein_content: String,
 
     #[serde(
         default,
@@ -246,8 +238,7 @@ mod tests {
         let nutrition = recipe.nutrition.unwrap();
 
         let cals = nutrition.calories.unwrap();
-        assert_eq!(cals.count, 240.0);
-        assert_eq!(cals.unit, "calories");
+        assert_eq!(cals, "240 calories");
 
         Ok(())
     }

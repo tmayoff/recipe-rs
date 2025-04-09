@@ -176,8 +176,8 @@ fn download_parse() -> Result<()> {
                         .to_string(),
                     "Now add the dried lentils, canned tomatoes and their juices, coconut milk \
                      and vegetable broth to the pan. Stir well and turn the heat to high. Bring \
-                     to a boil, then lower heat and simmer for about 15 minutes, until the lentils \
-                     are cooked and soft. Stir occasionally."
+                     to a boil, then lower heat and simmer for about 15 minutes, until the \
+                     lentils are cooked and soft. Stir occasionally."
                         .to_string(),
                     "Squeeze the lemon juice into the pan, and stir in the spinach as well until \
                      wilted. Add salt to taste. I used 1 teaspoon."
