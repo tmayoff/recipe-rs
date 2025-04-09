@@ -166,8 +166,8 @@ fn download_parse() -> Result<()> {
                     },
                 ],
                 directions: vec![
-                    "In a large pot or pan over medium heat,sauté the chopped onion in the olive \
-                     oil for 5 minutes,stirring frequently.Then add the garlic and ginger and \
+                    "In a large pot or pan over medium heat, sauté the chopped onion in the olive \
+                     oil for 5 minutes, stirring frequently. Then add the garlic and ginger and \
                      cook 1 more minute, until fragrant."
                         .to_string(),
                     "Add the garam masala, turmeric and red pepper flakes to the pan and stir \
@@ -176,7 +176,7 @@ fn download_parse() -> Result<()> {
                         .to_string(),
                     "Now add the dried lentils, canned tomatoes and their juices, coconut milk \
                      and vegetable broth to the pan. Stir well and turn the heat to high. Bring \
-                     to a boil, then lower heat andsimmer for about 15 minutes, until the lentils \
+                     to a boil, then lower heat and simmer for about 15 minutes, until the lentils \
                      are cooked and soft. Stir occasionally."
                         .to_string(),
                     "Squeeze the lemon juice into the pan, and stir in the spinach as well until \
@@ -186,11 +186,11 @@ fn download_parse() -> Result<()> {
                 ],
                 nutritional_information: Some(NutritionalInformation {
                     calories_kcal: 258.0,
-                    carbohydrates_g: 0.0,
-                    fat_g: 0.0,
-                    protein_g: 0.0,
+                    carbohydrates_g: 28.0,
+                    fat_g: 13.0,
+                    protein_g: 11.0,
                     cholesterol_mg: 0.0,
-                    fiber_g: 0.0,
+                    fiber_g: 12.0,
                 }),
             },
         },
@@ -245,8 +245,8 @@ fn download_parse() -> Result<()> {
                     carbohydrates_g: 0.0,
                     fat_g: 0.0,
                     protein_g: 0.0,
-                    cholesterol_mg: todo!(),
-                    fiber_g: todo!(),
+                    cholesterol_mg: 0.0,
+                    fiber_g: 0.0,
                 }),
             },
         },
@@ -527,8 +527,8 @@ fn download_parse() -> Result<()> {
                     carbohydrates_g: 0.0,
                     fat_g: 0.0,
                     protein_g: 0.0,
-                    cholesterol_mg: todo!(),
-                    fiber_g: todo!(),
+                    cholesterol_mg: 0.0,
+                    fiber_g: 0.0,
                 }),
             },
         },
