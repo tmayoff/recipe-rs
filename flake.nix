@@ -23,7 +23,7 @@
           inherit system overlays;
         };
 
-        rust = pkgs.rust-bin.stable.latest.default;
+        rust = pkgs.rust-bin.nightly.latest.default;
       in {
         devShell = pkgs.mkShell {
           buildInputs = with pkgs; [
@@ -36,10 +36,10 @@
           nativeBuildInputs = with pkgs;
             [
               (rust.override {
-                extensions = ["rust-src" "llvm-tools-preview"];
+                extensions = ["rust-src" "rustfmt" "llvm-tools-preview" "rust-analyzer"];
                 targets = ["wasm32-unknown-unknown"];
               })
-              rust-analyzer
+
               wasm-pack
 
               yarn

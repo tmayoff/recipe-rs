@@ -16,7 +16,10 @@ struct Args {
 }
 
 fn download_dom(url: &Url) -> Result<Html> {
-    let dom_text = ureq::get(&url.to_string()).call()?.into_body().read_to_string()?;
+    let dom_text = ureq::get(&url.to_string())
+        .call()?
+        .into_body()
+        .read_to_string()?;
     let dom = Html::parse_document(&dom_text);
     Ok(dom)
 }
