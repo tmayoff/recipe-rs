@@ -242,11 +242,11 @@ fn download_parse() -> Result<()> {
                 ],
                 nutritional_information: Some(NutritionalInformation {
                     calories_kcal: 354.52,
-                    carbohydrates_g: 0.0,
-                    fat_g: 0.0,
-                    protein_g: 0.0,
-                    cholesterol_mg: 0.0,
-                    fiber_g: 0.0,
+                    carbohydrates_g: 4.71,
+                    fat_g: 28.63,
+                    protein_g: 20.23,
+                    cholesterol_mg: 70.06,
+                    fiber_g: 1.63,
                 }),
             },
         },
@@ -537,6 +537,7 @@ fn download_parse() -> Result<()> {
     for test in tests {
         let url = url::Url::parse(&test.url)?;
         let dom = download_dom(&url).with_context(|| "Failed to download DOM")?;
+        // println!("{}", dom.html().to_string());
         let recipe = scrapers::scrape(&url, &dom)?;
 
         assert_eq!(recipe, test.expected);
