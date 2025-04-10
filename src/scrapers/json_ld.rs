@@ -155,17 +155,3 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
         None => Err(Error::NotJsonLD),
     }
 }
-
-// #[cfg(test)]
-// mod tests {
-//     use super::to_kcal;
-
-//     #[test]
-//     fn to_calories() {
-//         let input = "354.52 calories";
-
-//         let kcal = to_kcal(input);
-
-//         assert_eq!(kcal, 354.52);
-//     }
-// }

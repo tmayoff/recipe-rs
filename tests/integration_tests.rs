@@ -555,7 +555,7 @@ fn download_parse() -> Result<()> {
     for test in tests {
         let url = url::Url::parse(&test.url)?;
         let dom = download_dom(&url).with_context(|| "Failed to download DOM")?;
-        // println!("{}", dom.html().to_string());
+
         let recipe = scrapers::scrape(&url, &dom)?;
 
         assert_eq!(recipe, test.expected);
