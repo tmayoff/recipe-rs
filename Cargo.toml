@@ -22,7 +22,7 @@ serde_json = "1.0.140"
 ingredient = "0.3.0"
 thiserror = "2.0.12"
 serde_path_to_error = "0.1.17"
-uom = { version = "0.36.0", features = ["f32", "f64", "i32", "serde", "si"], default-features = false }
+uom = { version = "0.36.0", features = ["f32", "i32", "si"], default-features = false }
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 anyhow = "1.0.97"
