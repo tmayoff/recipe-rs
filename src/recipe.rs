@@ -52,12 +52,18 @@ impl Ingredient {
 #[wasm_bindgen]
 #[derive(Default, Clone, Debug, Serialize, PartialEq)]
 pub struct NutritionalInformation {
-    pub calories_kcal: f32,
-    pub carbohydrates_g: f32,
-    pub cholesterol_mg: f32,
-    pub fat_g: f32,
-    pub fiber_g: f32,
-    pub protein_g: f32,
+    pub serving_size: Option<i32>,
+    pub calories_kcal: Option<f32>,
+    pub carbohydrates_g: Option<f32>,
+    pub cholesterol_mg: Option<f32>,
+    pub fat_g: Option<f32>,
+    pub saturated_fat_g: Option<f32>,
+    pub unsaturated_fat_g: Option<f32>,
+    pub trans_fat_g: Option<f32>,
+    pub fiber_g: Option<f32>,
+    pub protein_g: Option<f32>,
+    pub sodium_mg: Option<f32>,
+    pub sugar_g: Option<f32>,
 }
 
 #[derive(Default, Debug, Serialize, PartialEq)]

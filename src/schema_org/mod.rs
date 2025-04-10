@@ -1,4 +1,4 @@
-use serde::{Deserialize, Deserializer};
+use serde::Deserialize;
 
 #[derive(Clone, Deserialize)]
 #[serde(untagged)]
@@ -41,42 +41,6 @@ pub enum RecipeInstructions {
     CreativeWork(Vec<CreativeWork>),
 }
 
-#[derive(Clone, Deserialize, Default, Debug)]
-pub struct Quantity {
-    pub count: f32,
-    pub unit: String,
-}
-
-fn into_quantity<'de, D>(deserializer: D) -> Result<Quantity, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    let s: &str = Deserialize::deserialize(deserializer)?;
-
-    let mut args = s.split_whitespace();
-    Ok(Quantity {
-        count: args.next().unwrap_or_default().parse::<f32>().unwrap(),
-        unit: args.next().unwrap_or_default().to_string(),
-    })
-}
-
-fn option_into_quantity<'de, D>(deserializer: D) -> Result<Option<Quantity>, D::Error>
-where
-    D: Deserializer<'de>,
-{
-    Option::deserialize(deserializer)?
-        .map(|s: String| {
-            let mut args = s.split_whitespace();
-            let count_str = args.next().unwrap_or_default();
-            let count = count_str
-                .parse::<f32>()
-                .map_err(|e| serde::de::Error::custom(format!("Failed to parse count: {}", e)))?;
-            let unit = args.next().unwrap_or_default().to_string();
-            Ok(Quantity { count, unit })
-        })
-        .transpose()
-}
-
 #[derive(Clone, Default, Debug, Deserialize)]
 pub struct NutritionalInformation {
     #[serde(default)]
@@ -89,43 +53,31 @@ pub struct NutritionalInformation {
     pub cholesterol_content: Option<String>,
 
     #[serde(default, rename = "fatContent")]
-    pub fat_content: String,
+    pub fat_content: Option<String>,
 
     #[serde(default, rename = "fiberContent")]
-    pub fiber_content: String,
+    pub fiber_content: Option<String>,
 
     #[serde(default, rename = "proteinContent")]
-    pub protein_content: String,
+    pub protein_content: Option<String>,
 
-    #[serde(
-        default,
-        rename = "saturatedFatContent",
-        deserialize_with = "into_quantity"
-    )]
-    saturated_fat_content: Quantity,
+    #[serde(default, rename = "saturatedFatContent")]
+    pub saturated_fat_content: Option<String>,
 
-    #[serde(default, rename = "sodiumContent", deserialize_with = "into_quantity")]
-    sodium_content: Quantity,
+    #[serde(default, rename = "sodiumContent")]
+    pub sodium_content: Option<String>,
 
-    #[serde(default, rename = "sugarContent", deserialize_with = "into_quantity")]
-    sugar_content: Quantity,
+    #[serde(default, rename = "sugarContent")]
+    pub sugar_content: Option<String>,
 
-    #[serde(
-        default,
-        rename = "transFatContent",
-        deserialize_with = "into_quantity"
-    )]
-    trans_fat_content: Quantity,
+    #[serde(default, rename = "transFatContent")]
+    pub trans_fat_content: Option<String>,
 
-    #[serde(
-        default,
-        rename = "unsaturatedFatContent",
-        deserialize_with = "into_quantity"
-    )]
-    unsaturated_fat_content: Quantity,
+    #[serde(default, rename = "unsaturatedFatContent")]
+    pub unsaturated_fat_content: Option<String>,
 
     #[serde(rename = "servingSize")]
-    serving_size: Option<String>,
+    pub serving_size: Option<String>,
 }
 
 #[derive(Deserialize, Clone)]

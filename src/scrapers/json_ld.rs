@@ -54,7 +54,11 @@ fn to_grams(quantity: &str) -> f32 {
     grams.value().to_f32().unwrap_or_default()
 }
 
-fn to_mgrams(quantity: String) -> f32 {
+fn to_mgrams(quantity: &str) -> f32 {
+    if quantity.trim().is_empty() {
+        return 0.0;
+    }
+
     let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity).unwrap();
 
     let grams = grams.get::<uom::si::mass::milligram>();
@@ -66,15 +70,18 @@ impl TryInto<crate::recipe::NutritionalInformation> for schema_org::NutritionalI
 
     fn try_into(self) -> Result<crate::recipe::NutritionalInformation, Self::Error> {
         Ok(crate::recipe::NutritionalInformation {
-            calories_kcal: self.calories.map(|c| to_kcal(&c)).unwrap_or_default(),
-            carbohydrates_g: self
-                .carbohydrate_content
-                .map(|q| to_grams(&q))
-                .unwrap_or_default(),
-            fat_g: to_grams(&self.fat_content),
-            protein_g: to_grams(&self.protein_content),
-            cholesterol_mg: self.cholesterol_content.map(to_mgrams).unwrap_or_default(),
-            fiber_g: to_grams(&self.fiber_content),
+            serving_size: Some(1),
+            calories_kcal: self.calories.map(|c| to_kcal(&c)),
+            carbohydrates_g: self.carbohydrate_content.map(|q| to_grams(&q)),
+            fat_g: self.fat_content.map(|f| to_grams(&f)),
+            saturated_fat_g: self.saturated_fat_content.map(|f| to_grams(&f)),
+            trans_fat_g: self.trans_fat_content.map(|f| to_grams(&f)),
+            unsaturated_fat_g: self.unsaturated_fat_content.map(|f| to_grams(&f)),
+            protein_g: self.protein_content.map(|p| to_grams(&p)),
+            cholesterol_mg: self.cholesterol_content.map(|c| to_mgrams(&c)),
+            fiber_g: self.fiber_content.map(|f| to_grams(&f)),
+            sodium_mg: self.sodium_content.map(|s| to_mgrams(&s)),
+            sugar_g: self.sugar_content.map(|s| to_grams(&s)),
         })
     }
 }
