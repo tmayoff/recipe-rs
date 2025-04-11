@@ -17,6 +17,10 @@ impl Into<JsValue> for scrapers::Error {
     }
 }
 
+#[cfg(target_arch = "wasm32")]
+#[global_allocator]
+pub static ALLOC: &alloc_cat::AllocCat = &alloc_cat::ALLOCATOR;
+
 #[wasm_bindgen]
 pub fn scrape(url: JsString, dom: JsString) -> Result<Recipe, scrapers::Error> {
     let url: String = url.into();
