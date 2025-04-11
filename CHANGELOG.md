@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.0](https://github.com/tmayoff/recipe-rs/compare/v0.1.11...v0.2.0) (2025-04-10)
+
+
+### Features
+
+* Adding macro information ([#106](https://github.com/tmayoff/recipe-rs/issues/106)) ([3fee513](https://github.com/tmayoff/recipe-rs/commit/3fee51323c910d711e179ecb17f7ff6e217205fc))
+
 ## [0.1.11](https://github.com/tmayoff/recipe-rs/compare/v0.1.10...v0.1.11) (2025-03-23)
 
 
