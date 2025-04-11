@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.1](https://github.com/tmayoff/recipe-rs/compare/v0.2.0...v0.2.1) (2025-04-11)
+
+
+### Bug Fixes
+
+* crash with newer scraper library ([#111](https://github.com/tmayoff/recipe-rs/issues/111)) ([1a95d60](https://github.com/tmayoff/recipe-rs/commit/1a95d60559846f094c9bb3f47f91548067077ecc))
+* fixed workflows for PRs ([d5dc20e](https://github.com/tmayoff/recipe-rs/commit/d5dc20e938c148b2abe3fbb89605b20614a4ad18))
+
 ## [0.2.0](https://github.com/tmayoff/recipe-rs/compare/v0.1.11...v0.2.0) (2025-04-10)
 
 
