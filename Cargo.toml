@@ -26,6 +26,6 @@ uom = { version = "0.36.0", features = ["f32", "f64", "i32", "si"], default-feat
 alloc_cat = "1.0.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
-anyhow = "1.0.97"
-ureq = "3.0.8"
-clap = { version = "4.5.31", features = ["derive"] }
+anyhow = "1.0.98"
+ureq = "3.0.11"
+clap = { version = "4.5.37", features = ["derive"] }
