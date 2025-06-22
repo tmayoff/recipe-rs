@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.2](https://github.com/tmayoff/recipe-rs/compare/v0.2.1...v0.2.2) (2025-06-22)
+
+
+### Bug Fixes
+
+* macro parsing ([#122](https://github.com/tmayoff/recipe-rs/issues/122)) ([09e34d7](https://github.com/tmayoff/recipe-rs/commit/09e34d707b110b77190ce3f89a3812cc089d028e))
+
 ## [0.2.1](https://github.com/tmayoff/recipe-rs/compare/v0.2.0...v0.2.1) (2025-04-11)
 
 
