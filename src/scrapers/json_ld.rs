@@ -37,9 +37,10 @@ fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
 }
 
 fn to_kcal(energy: &str) -> f32 {
-    let energy = energy.replace("calories", "kcal");
+    let energy = energy.trim().to_lowercase().replace("calories", "kcal");
 
-    let cals = uom::si::f32::Energy::from_str(&energy).expect("Failed to get calorie information");
+    let cals = uom::si::f32::Energy::from_str(&energy)
+        .expect(&format!("Failed to get calorie information: {}", energy));
     let kcals = cals.get::<uom::si::energy::kilocalorie>();
 
     kcals
@@ -49,6 +50,7 @@ fn to_grams(quantity: &str) -> f32 {
     if quantity.trim().is_empty() {
         return 0.0;
     }
+
     let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity).unwrap();
     let grams = grams.get::<uom::si::mass::gram>();
     grams.value().to_f32().unwrap_or_default()
