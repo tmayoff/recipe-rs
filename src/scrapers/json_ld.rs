@@ -51,7 +51,7 @@ fn to_grams(quantity: &str) -> f32 {
         return 0.0;
     }
 
-    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity).unwrap();
+    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity.trim().to_lowercase()).unwrap();
     let grams = grams.get::<uom::si::mass::gram>();
     grams.value().to_f32().unwrap_or_default()
 }
@@ -61,7 +61,7 @@ fn to_mgrams(quantity: &str) -> f32 {
         return 0.0;
     }
 
-    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity).unwrap();
+    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity.trim().to_lowercase()).unwrap();
 
     let grams = grams.get::<uom::si::mass::milligram>();
     grams.value().to_f32().unwrap_or_default()
