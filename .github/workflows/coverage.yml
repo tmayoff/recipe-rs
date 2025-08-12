@@ -16,8 +16,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: DeterminateSystems/nix-installer-action@v17
+    - uses: actions/checkout@v5
+    - uses: DeterminateSystems/nix-installer-action@v19
 
     - uses: cachix/cachix-action@v16
       with:
