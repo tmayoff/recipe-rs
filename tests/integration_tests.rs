@@ -17,14 +17,14 @@ fn download_dom(url: &Url) -> Result<Html> {
 
 #[test]
 fn download_parse() -> Result<()> {
-    struct Test {
-        url: String,
+    struct Test<'a> {
+        url: &'a str,
         expected: Recipe,
     }
 
     let tests = vec![
         Test {
-            url: "https://www.noracooks.com/red-lentil-dahl".to_string(),
+            url: "https://www.noracooks.com/red-lentil-dahl",
             expected: Recipe {
                 name: "Quick &amp; Easy Red Lentil Dahl".to_string(),
                 ingredients: vec![
@@ -201,7 +201,7 @@ fn download_parse() -> Result<()> {
             },
         },
         Test {
-            url: "https://s.samsungfood.com/JwKRp".to_string(),
+            url: "https://s.samsungfood.com/JwKRp",
             expected: Recipe {
                 name: "pork souvlaki".to_string(),
                 ingredients: vec![
@@ -263,8 +263,7 @@ fn download_parse() -> Result<()> {
             },
         },
         Test {
-            url: "https://www.ricardocuisine.com/en/recipes/6076-fryer-less-general-tao-chicken"
-                .to_string(),
+            url: "https://www.ricardocuisine.com/en/recipes/6076-fryer-less-general-tao-chicken",
             expected: Recipe {
                 name: "Fryer-Less General Tao Chicken".to_string(),
                 ingredients: vec![
@@ -550,10 +549,32 @@ fn download_parse() -> Result<()> {
                 }),
             },
         },
+        Test {
+            url: "https://www.cuisineaz.com/recettes/\
+            graines-de-chia-au-lait-de-coco-et-mangues-91786.aspx",
+            expected: Recipe {
+                name: "Graines de Chia au lait de coco et mangues".to_string(),
+                ingredients: vec![
+                    Ingredient {
+                    name: "Lait de coco".into(),
+                    amounts: vec![Measure {
+                        unit: "ml".into(),
+                        upper_value: None,
+                        value: 200.0,
+                    }],
+                    modifier: None,
+                },
+          ],
+          directions:
+        vec![
+            ],
+           nutritional_information: None
+            },
+        },
     ];
 
     for test in tests {
-        let url = url::Url::parse(&test.url)?;
+        let url = url::Url::parse(test.url)?;
         let dom = download_dom(&url).with_context(|| "Failed to download DOM")?;
 
         let recipe = scrapers::scrape(&url, &dom)?;

@@ -107,6 +107,9 @@ pub fn parse_ingredient(input: &str) -> Result<Ingredient, Error> {
     input = input.replace("OR", "or");
     input = input.replace("TO", "to");
 
+    // French translations
+    input = input.replace("c. à soupe", "tbsp");
+
     let mut parser = IngredientParser::new(false);
     parser.units.insert(String::from("unit"));
     let p = parser
