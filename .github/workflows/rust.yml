@@ -29,10 +29,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v5
-      - uses: taiki-e/install-action@v2
-        with:
-          tool: wasm-pack
+    - uses: taiki-e/install-action@v2
+      with:
+        tool: wasm-pack
 
-      - name: Build
-        run: wasm-pack build --target web
-      
+    - name: Build
+      run: wasm-pack build --target web
