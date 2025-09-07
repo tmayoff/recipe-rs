@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.4](https://github.com/tmayoff/recipe-rs/compare/v0.2.3...v0.2.4) (2025-09-07)
+
+
+### Bug Fixes
+
+* Wasm failed to build ([#133](https://github.com/tmayoff/recipe-rs/issues/133)) ([372138b](https://github.com/tmayoff/recipe-rs/commit/372138b850c1f65327de6f6df0cd04303dc9ad09))
+
 ## [0.2.3](https://github.com/tmayoff/recipe-rs/compare/v0.2.2...v0.2.3) (2025-09-07)
 
 
