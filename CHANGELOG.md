@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.2.3](https://github.com/tmayoff/recipe-rs/compare/v0.2.2...v0.2.3) (2025-09-07)
+
+
+### Bug Fixes
+
+* French abbreviations, and optional fields ([#131](https://github.com/tmayoff/recipe-rs/issues/131)) ([9fb973a](https://github.com/tmayoff/recipe-rs/commit/9fb973a05569494be8f376cbf80ea968d27f1a71))
+
 ## [0.2.2](https://github.com/tmayoff/recipe-rs/compare/v0.2.1...v0.2.2) (2025-06-22)
 
 
