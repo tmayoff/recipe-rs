@@ -1,6 +1,6 @@
 [package]
 name = "recipe-rs"
-version = "0.2.2"
+version = "0.2.3"
 edition = "2021"
 description = "A recipe scraper written in rust with wasm"
 repository = "https://github.com/tmayoff/recipe-rs"
