@@ -160,6 +160,7 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
                         }
                     })
                     .collect();
+
                 return Ok(recipe.try_into()?);
             }
             None => last_err = Some(Error::NoRecipeFound.into()),

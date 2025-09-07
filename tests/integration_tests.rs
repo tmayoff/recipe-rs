@@ -550,25 +550,64 @@ fn download_parse() -> Result<()> {
             },
         },
         Test {
-            url: "https://www.cuisineaz.com/recettes/\
-            graines-de-chia-au-lait-de-coco-et-mangues-91786.aspx",
+            url: r#"https://www.cuisineaz.com/recettes/graines-de-chia-au-lait-de-coco-et-mangues-91786.aspx"#,
             expected: Recipe {
                 name: "Graines de Chia au lait de coco et mangues".to_string(),
                 ingredients: vec![
                     Ingredient {
-                    name: "Lait de coco".into(),
-                    amounts: vec![Measure {
-                        unit: "ml".into(),
-                        upper_value: None,
-                        value: 200.0,
-                    }],
-                    modifier: None,
-                },
-          ],
-          directions:
-        vec![
-            ],
-           nutritional_information: None
+                        name: "Lait de coco".into(),
+                        amounts: vec![Measure {
+                            unit: "ml".into(),
+                            upper_value: None,
+                            value: 200.0,
+                        }],
+                        modifier: None,
+                    },
+                    Ingredient {
+                        name: "Graine de chia".into(),
+                        amounts: vec![Measure {
+                            unit: "tbsp".into(),
+                            upper_value: None,
+                            value: 2.0,
+                        }],
+                        modifier: None,
+                    },
+                    Ingredient {
+                        name: "Cassonade".into(),
+                        amounts: vec![Measure {
+                            unit: "tbsp".into(),
+                            upper_value: None,
+                            value: 1.0,
+                        }],
+                        modifier: None,
+                    },
+                    Ingredient {
+                        name: "Mangue".into(),
+                        amounts: vec![Measure {
+                            unit: "whole".into(),
+                            upper_value: None,
+                            value: 1.0,
+                        }],
+                        modifier: None,
+                    },
+                ],
+                directions: vec![
+                    "Mélanger les graines de chia avec le lait de coco et la cassonade la veille \
+                     dans un bol. "
+                        .into(),
+                    "Couvrir avec du\u{a0}film transparent et laisser reposer toute la nuit. "
+                        .into(),
+                    "Le lendemain bien mélanger les graines de chia et disposer dans des \
+                     verrines. "
+                        .into(),
+                    "Préparer la mangue : éplucher et découper en cubes.".into(),
+                    "Vous pouvez ensuite disposer la mangue directement sur vos graines.".into(),
+                    "Bon appétit !".into(),
+                    "Retrouvez la recette sur mon blog http://www.chezcachou.com/2016/10/\
+                    graines-de-chia-au-lait-de-coco-et-mangues.html".into()
+                ],
+
+                nutritional_information: None,
             },
         },
     ];
