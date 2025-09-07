@@ -6,6 +6,7 @@ use crate::{
 };
 
 use fraction::ToPrimitive;
+use regex::Regex;
 use scraper::{Html, Selector};
 
 use thiserror::Error;
@@ -23,8 +24,8 @@ pub enum Error {
     Ingredient(#[from] recipe::Error),
     // #[error("@type isn't the correct data type (String or Vec<String>)")]
     // IncorrectRecipeDataType,
-    // #[error(transparent)]
-    // Other(#[from] anyhow::Error),
+    #[error(transparent)]
+    Other(#[from] anyhow::Error),
 }
 
 fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
@@ -51,7 +52,8 @@ fn to_grams(quantity: &str) -> f32 {
         return 0.0;
     }
 
-    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity.trim().to_lowercase()).unwrap();
+    let grams: uom::si::f64::Mass =
+        uom::si::Quantity::from_str(&quantity.trim().to_lowercase()).unwrap();
     let grams = grams.get::<uom::si::mass::gram>();
     grams.value().to_f32().unwrap_or_default()
 }
@@ -61,7 +63,8 @@ fn to_mgrams(quantity: &str) -> f32 {
         return 0.0;
     }
 
-    let grams: uom::si::f64::Mass = uom::si::Quantity::from_str(&quantity.trim().to_lowercase()).unwrap();
+    let grams: uom::si::f64::Mass =
+        uom::si::Quantity::from_str(&quantity.trim().to_lowercase()).unwrap();
 
     let grams = grams.get::<uom::si::mass::milligram>();
     grams.value().to_f32().unwrap_or_default()
@@ -133,6 +136,8 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
 
     for json_ld in json {
         let t = json_ld.inner_html();
+        let regex = Regex::new("[\u{0000}-\u{001F}]").map_err(|e| anyhow::Error::from(e))?;
+        let t = regex.replace_all(&t, " ").to_string();
 
         let schema: Result<schema_org::LdJson, _> = serde_json::from_str(&t);
 
@@ -143,8 +148,24 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
 
         let schema: schema_org::LdJson = schema.expect("Error handled above ^");
         let recipe = schema.get_recipe();
+
         match recipe {
-            Some(recipe) => return Ok(recipe.try_into()?),
+            Some(recipe) => {
+                let mut recipe = recipe;
+                recipe.recipe_ingredients = recipe
+                    .recipe_ingredients
+                    .iter()
+                    .filter_map(|i| {
+                        if i.is_empty() {
+                            None
+                        } else {
+                            Some(i.to_owned())
+                        }
+                    })
+                    .collect();
+
+                return Ok(recipe.try_into()?);
+            }
             None => last_err = Some(Error::NoRecipeFound.into()),
         }
     }

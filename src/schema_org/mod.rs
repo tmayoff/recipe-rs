@@ -1,6 +1,6 @@
 use serde::Deserialize;
 
-#[derive(Clone, Deserialize)]
+#[derive(Debug, Clone, Deserialize)]
 #[serde(untagged)]
 pub enum Type {
     List(Vec<String>),
@@ -16,7 +16,7 @@ impl Type {
     }
 }
 
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 pub struct CreativeWork {
     #[serde(rename = "@type")]
     pub _type: Option<Type>,
@@ -34,7 +34,7 @@ struct ItemList {
     item_list_element: String,
 }
 
-#[derive(Clone, Deserialize)]
+#[derive(Clone, Debug, Deserialize)]
 #[serde(untagged)]
 pub enum RecipeInstructions {
     String(String),
@@ -80,14 +80,14 @@ pub struct NutritionalInformation {
     pub serving_size: Option<String>,
 }
 
-#[derive(Deserialize, Clone)]
+#[derive(Debug, Deserialize, Clone)]
 pub struct Recipe {
     #[serde(rename = "@type")]
     pub _type: Option<Type>,
     pub name: String,
 
     #[serde(rename = "cookTime")]
-    pub cook_time: String, // Duration
+    pub cook_time: Option<String>, // Duration
     #[serde(rename = "cookingMethod")]
     pub cooking_method: Option<String>,
 
@@ -100,14 +100,15 @@ pub struct Recipe {
     pub recipe_instructions: RecipeInstructions,
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 #[serde(untagged)]
 pub enum GraphContent {
+    // These should be ordered
     Recipe(Recipe),
     Json(serde_json::Value),
 }
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub struct Schema {
     #[serde(rename = "@graph")]
     pub graph: Option<Vec<GraphContent>>,
@@ -184,7 +185,7 @@ mod tests {
 
         let recipe: Recipe = serde_json::from_str(json)?;
 
-        assert_eq!(recipe.cook_time, "PT1H");
+        assert_eq!(recipe.cook_time, Some("PT1H".to_string()));
 
         assert!(recipe.nutrition.is_some());
         let nutrition = recipe.nutrition.unwrap();

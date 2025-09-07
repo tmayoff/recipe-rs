@@ -17,14 +17,14 @@ fn download_dom(url: &Url) -> Result<Html> {
 
 #[test]
 fn download_parse() -> Result<()> {
-    struct Test {
-        url: String,
+    struct Test<'a> {
+        url: &'a str,
         expected: Recipe,
     }
 
     let tests = vec![
         Test {
-            url: "https://www.noracooks.com/red-lentil-dahl".to_string(),
+            url: "https://www.noracooks.com/red-lentil-dahl",
             expected: Recipe {
                 name: "Quick &amp; Easy Red Lentil Dahl".to_string(),
                 ingredients: vec![
@@ -201,7 +201,7 @@ fn download_parse() -> Result<()> {
             },
         },
         Test {
-            url: "https://s.samsungfood.com/JwKRp".to_string(),
+            url: "https://s.samsungfood.com/JwKRp",
             expected: Recipe {
                 name: "pork souvlaki".to_string(),
                 ingredients: vec![
@@ -263,8 +263,7 @@ fn download_parse() -> Result<()> {
             },
         },
         Test {
-            url: "https://www.ricardocuisine.com/en/recipes/6076-fryer-less-general-tao-chicken"
-                .to_string(),
+            url: "https://www.ricardocuisine.com/en/recipes/6076-fryer-less-general-tao-chicken",
             expected: Recipe {
                 name: "Fryer-Less General Tao Chicken".to_string(),
                 ingredients: vec![
@@ -550,10 +549,71 @@ fn download_parse() -> Result<()> {
                 }),
             },
         },
+        Test {
+            url: r#"https://www.cuisineaz.com/recettes/graines-de-chia-au-lait-de-coco-et-mangues-91786.aspx"#,
+            expected: Recipe {
+                name: "Graines de Chia au lait de coco et mangues".to_string(),
+                ingredients: vec![
+                    Ingredient {
+                        name: "Lait de coco".into(),
+                        amounts: vec![Measure {
+                            unit: "ml".into(),
+                            upper_value: None,
+                            value: 200.0,
+                        }],
+                        modifier: None,
+                    },
+                    Ingredient {
+                        name: "Graine de chia".into(),
+                        amounts: vec![Measure {
+                            unit: "tbsp".into(),
+                            upper_value: None,
+                            value: 2.0,
+                        }],
+                        modifier: None,
+                    },
+                    Ingredient {
+                        name: "Cassonade".into(),
+                        amounts: vec![Measure {
+                            unit: "tbsp".into(),
+                            upper_value: None,
+                            value: 1.0,
+                        }],
+                        modifier: None,
+                    },
+                    Ingredient {
+                        name: "Mangue".into(),
+                        amounts: vec![Measure {
+                            unit: "whole".into(),
+                            upper_value: None,
+                            value: 1.0,
+                        }],
+                        modifier: None,
+                    },
+                ],
+                directions: vec![
+                    "Mélanger les graines de chia avec le lait de coco et la cassonade la veille \
+                     dans un bol. "
+                        .into(),
+                    "Couvrir avec du\u{a0}film transparent et laisser reposer toute la nuit. "
+                        .into(),
+                    "Le lendemain bien mélanger les graines de chia et disposer dans des \
+                     verrines. "
+                        .into(),
+                    "Préparer la mangue : éplucher et découper en cubes.".into(),
+                    "Vous pouvez ensuite disposer la mangue directement sur vos graines.".into(),
+                    "Bon appétit !".into(),
+                    "Retrouvez la recette sur mon blog http://www.chezcachou.com/2016/10/\
+                    graines-de-chia-au-lait-de-coco-et-mangues.html".into()
+                ],
+
+                nutritional_information: None,
+            },
+        },
     ];
 
     for test in tests {
-        let url = url::Url::parse(&test.url)?;
+        let url = url::Url::parse(test.url)?;
         let dom = download_dom(&url).with_context(|| "Failed to download DOM")?;
 
         let recipe = scrapers::scrape(&url, &dom)?;
