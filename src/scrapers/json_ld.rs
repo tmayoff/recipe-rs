@@ -24,8 +24,6 @@ pub enum Error {
     Ingredient(#[from] recipe::Error),
     // #[error("@type isn't the correct data type (String or Vec<String>)")]
     // IncorrectRecipeDataType,
-    #[error(transparent)]
-    Other(#[from] anyhow::Error),
 }
 
 fn extract_steps_from_how_to_section(work: &CreativeWork) -> Vec<String> {
@@ -135,9 +133,13 @@ pub fn scrape(dom: &Html) -> std::result::Result<Recipe, Error> {
     let mut last_err: Option<Error> = None;
 
     for json_ld in json {
-        let t = json_ld.inner_html();
-        let regex = Regex::new("[\u{0000}-\u{001F}]").map_err(|e| anyhow::Error::from(e))?;
-        let t = regex.replace_all(&t, " ").to_string();
+        let mut t = json_ld.inner_html();
+        match Regex::new("[\u{0000}-\u{001F}]") {
+            Ok(r) => t = r.replace_all(&t, " ").to_string(),
+            Err(_) => println!(
+                "Failed to get regex, hopefully no weird control characters exist in the string"
+            ),
+        }
 
         let schema: Result<schema_org::LdJson, _> = serde_json::from_str(&t);
 
