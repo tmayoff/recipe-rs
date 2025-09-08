@@ -11,7 +11,7 @@ crate-type = ["cdylib", "rlib"]
 [dependencies]
 fraction = { version = "0.15.3", features = ["with-unicode"] }
 getrandom = { version = "0.2.16", features = ["js"] }
-js-sys = "0.3.77"
+js-sys = "0.3.78"
 regex = "1.11.2"
 scraper = "=0.24.0"
 url = "2.5.4"
@@ -27,5 +27,5 @@ alloc_cat = "1.0.0"
 
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 anyhow = "1.0.99"
-ureq = "3.1.0"
-clap = { version = "4.5.45", features = ["derive"] }
+ureq = "3.1.1"
+clap = { version = "4.5.47", features = ["derive"] }
